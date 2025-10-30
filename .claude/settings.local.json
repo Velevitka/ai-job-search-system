@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.linkedin.com)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:careers.virginatlantic.com)",
+      "Bash(pandoc:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

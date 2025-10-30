@@ -1,0 +1,180 @@
+# PM Job Search System - Git Ignore
+# This file ensures NO personal data gets committed to public GitHub
+
+# ============================================
+# PERSONAL DATA FOLDERS (NEVER COMMIT THESE)
+# ============================================
+
+# Master CV and personal documents
+master/
+!master/.gitkeep
+!master/README.md
+
+# All job applications (contains personal info)
+applications/
+!applications/.gitkeep
+!applications/README.md
+!applications/_example-application/
+
+# Archive of old applications
+archive/
+!archive/.gitkeep
+
+# Staging area for draft applications
+staging/
+!staging/.gitkeep
+
+# Personal insights and metrics
+insights/
+!insights/.gitkeep
+!insights/README.md
+
+# ============================================
+# DOCUMENT TYPES (PERSONAL DATA)
+# ============================================
+
+# Word documents (CVs, cover letters)
+*.docx
+*.doc
+*.docm
+
+# PDFs (CVs, cover letters)
+*.pdf
+
+# Rich text
+*.rtf
+
+# Text files that might contain personal data
+*_PRIVATE.md
+*_personal.md
+*-personal.md
+
+# ============================================
+# SYSTEM FILES
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ============================================
+# EDITOR/IDE FILES
+# ============================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# LOGS AND TEMPORARY FILES
+# ============================================
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ============================================
+# NODE/NPM (if using any JS tools)
+# ============================================
+
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ============================================
+# PYTHON (if using any Python scripts)
+# ============================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+ENV/
+
+# ============================================
+# CREDENTIALS AND SECRETS
+# ============================================
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# API keys
+secrets.json
+credentials.json
+*.key
+*.pem
+
+# ============================================
+# BACKUP FILES
+# ============================================
+
+*.bak
+*.backup
+*_backup.*
+
+# ============================================
+# NOTES AND PERSONAL TRACKING
+# ============================================
+
+# Personal notes that shouldn't be public
+NOTES_PERSONAL.md
+TODO_PERSONAL.md
+personal-notes/
+
+# ============================================
+# KEEP CERTAIN EXAMPLE FILES
+# ============================================
+
+# Allow example/template files even in ignored directories
+!**/example-*.md
+!**/template-*.md
+!**/_example-*/**
+!applications/_example-application/
+!applications/_example-application/**
+
+# ============================================
+# PROJECT SPECIFIC
+# ============================================
+
+# Any file explicitly marked as private
+*PRIVATE*
+*private*
+
+# Tracking files with real company names
+application-tracker-*.md
+
+# Personal metrics and analytics
+metrics-*.json
+analytics-*.csv
