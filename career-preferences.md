@@ -20,10 +20,16 @@
   - Dublin, Ireland
   - Stockholm, Sweden
   - Other EU cities
+- ✅ **Dubai** - Open to relocation
+- ✅ **Manila** - Open to relocation
+- ✅ **Seoul** - Open to relocation
+- ✅ **Tokio** - Open to relocation
+- ✅ **Bangkok** - Open to relocation
 
 ### Not Open to Relocation
-- ❌ **Middle East** (Dubai, etc.)
-- ❌ **Southeast Asia** (Bangkok, etc.) - Exception: Singapore ✅
+- ❌ **Middle East** (Saudi Arabia, etc.)
+- ❌ **Southeast Asia** (Vietnam, etc.) - Exception: Singapore, Manila, Seoul, Tokio, Bangkok  ✅
+- ❌ **United States** (San Francisco, etc.)
 
 ---
 
@@ -32,7 +38,8 @@
 **Polish Passport (EU Citizen):**
 - ✅ **Right to work in all EU countries** - No visa sponsorship needed
 - ✅ **UK:** Currently authorized to work
-- ⚠️ **Australia/Canada/Singapore:** Would require visa sponsorship
+- ✅ **Manila:** Married to Filipina - Spouse visa route
+- ⚠️ **Australia/Canada/Singapore/Dubai/Seoul/Tokio/Bangkok:** Would require visa sponsorship
 
 **Key Advantage:**
 - Can start immediately in any EU country
@@ -60,6 +67,7 @@
 - Director of Product - Growth
 - Head of Growth Product
 - Senior PM / Lead PM - Growth
+- Senior PM / Lead PM - Aquire/Acquisition
 
 **4. Customer Journey / Digital Experience** (Fit: 7-8)
 - Director of Product - Customer Experience
@@ -73,7 +81,7 @@
 
 **Note on AI Roles:**
 - ✅ **Open to:** AI product roles that leverage AI for customer experiences (e.g., AI personalization, AI-powered recommendations, AI agents for consumers)
-- ⚠️ **Avoid:** Deep ML infrastructure, AI research, conversational AI specialist roles (like Stax withdrawal)
+- ⚠️ **Avoid:** Deep ML infrastructure, AI research, 
 - 📚 **Upskilling:** Actively building AI product management skills (e.g., this AI-powered job search system, AI-driven personalization work)
 
 ---
@@ -205,8 +213,6 @@
 ## Red Flags / Deal Breakers
 
 ### Absolutely Avoid
-- ❌ **Relocation to Middle East/Southeast Asia** (except Singapore)
-- ❌ **Contract/temporary roles** (unless very strategic)
 - ❌ **Roles requiring deep ML/AI research background**
 - ❌ **Early-stage startups without product-market fit**
 - ❌ **Gaming industry**

@@ -4,7 +4,8 @@
       "WebFetch(domain:www.linkedin.com)",
       "Bash(mkdir:*)",
       "WebFetch(domain:careers.virginatlantic.com)",
-      "Bash(pandoc:*)"
+      "Bash(pandoc:*)",
+      "WebFetch(domain:www.sumup.com)"
     ],
     "deny": [],
     "ask": []
