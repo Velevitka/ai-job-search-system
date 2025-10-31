@@ -102,6 +102,9 @@ logs/
 tmp/
 temp/
 
+# Claude Code media extraction folders
+media-*/
+
 # ============================================
 # NODE/NPM (if using any JS tools)
 # ============================================
