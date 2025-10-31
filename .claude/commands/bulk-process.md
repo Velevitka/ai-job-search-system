@@ -22,6 +22,7 @@ Look for files in `staging/`:
 - Images/screenshots (PNG, JPG)
 - Text files (.txt, .md)
 - Word documents (.docx)
+- HTML documents
 
 If folder is empty:
 ```
@@ -38,7 +39,7 @@ To use bulk processing:
 For each file:
 1. **PDFs:** Extract text content
 2. **Images:** Use OCR or vision capabilities to read job description
-3. **Text/Markdown:** Read directly
+3. **Text/Markdown/HTML:** Read directly
 4. **Word docs:** Extract text content
 
 ### Step 3: Run Quick Analysis
