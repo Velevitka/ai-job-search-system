@@ -96,6 +96,14 @@ See [USAGE-GUIDE.md](USAGE-GUIDE.md) for detailed usage instructions.
 - Integrates keywords naturally
 - Generates both Markdown and PDF versions using Pandoc + Eisvogel template
 - Professional formatting: Calibri font, proper spacing, 2-page max
+- **Automated validation** - Ensures 2-page max, A4 size, correct formatting
+
+### Cover Letter Generation with Formatting Guardrails
+- **1-page enforcement** - Automatic validation ensures professional length
+- Word count limits: 300-400 words (optimized for Eisvogel spacing)
+- Company research integration with recent news/products
+- Multi-draft generation with AI self-critique
+- **Automated validation** - Catches 2-page issues before delivery
 
 ### Intelligent Job Analysis
 - Calculates honest fit scores (0-10)
@@ -335,6 +343,40 @@ Compare to manual process: **2-3 hours per application**
 | `/update-status` | Track application status | 2 min | status.md |
 | `/weekly-review` | Generate weekly summary | 5 min | Review of all applications |
 | `/prepare-interview` | Interview preparation | 10 min | Company research, practice questions |
+
+## 🔍 Validation Scripts
+
+Automated quality control to ensure professional document formatting:
+
+### CV Validation
+```bash
+python scripts/validate-cv.py <cv.pdf> [<cv.md>]
+```
+
+**Checks:**
+- ✅ Exactly 2 pages (not 4, not 6)
+- ✅ A4 paper size (595 x 842 pts)
+- ✅ File size 60-80KB (Eisvogel typical)
+- ✅ Clean YAML (no problematic formatting)
+
+### Cover Letter Validation
+```bash
+python scripts/validate-cover-letter.py <cl.pdf> [<cl.md>]
+```
+
+**Checks:**
+- ✅ Exactly 1 page (CRITICAL - 2 pages is unprofessional)
+- ✅ Word count 300-400 (optimal for Eisvogel)
+- ✅ A4 paper size
+- ✅ File size 10-20KB
+
+**Why validation matters:**
+- Prevents 2-page cover letters (unprofessional)
+- Ensures consistent formatting across applications
+- Catches issues before submission
+- Automated - no manual checking needed
+
+See `docs/cv-formatting-guardrails.md` and `docs/cover-letter-formatting-guardrails.md` for details.
 
 ## 🛡️ Privacy & Data Protection
 

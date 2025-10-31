@@ -8,13 +8,37 @@ Create a tailored cover letter for Artur Swadzba that tells a strategic story, a
 ## Best Practices (ALWAYS FOLLOW)
 
 ### Length & Format
-- **Maximum one page (400–500 words)** — concise, scannable, results-driven
+- **CRITICAL: Maximum ONE page (300-400 words maximum)** — concise, scannable, results-driven
+- **Word count target: 300-400 words** (NOT 400-500 - Eisvogel spacing pushes this to 2 pages)
 - Use clear **3-part structure:**
   1. Opening hook & alignment
   2. Core narrative & impact story
   3. Closing & motivation
 - Keep paragraphs **short (3–5 lines max)**
 - Always **tailor tone and keywords** to company's language (e.g., Virgin Atlantic → "customer journeys", "digital experiences", "innovation")
+
+## ⚠️ CRITICAL FORMATTING REQUIREMENTS (READ FIRST!)
+
+**THE COVER LETTER MUST:**
+- ✅ Be **EXACTLY 1 PAGE** when generated as PDF
+- ✅ Be **300-400 words maximum** (NOT 400-500 - that creates 2 pages)
+- ✅ Use **Eisvogel template** with standard margins
+- ✅ Have **file size 10-20KB** (typical range)
+- ✅ Use **minimal YAML front matter** (geometry + fontsize only)
+
+**NEVER:**
+- ❌ Write 400-500 words (too long for 1 page with Eisvogel)
+- ❌ Use custom LaTeX formatting
+- ❌ Add excessive `\vspace` commands
+- ❌ Include tables, images, or complex formatting
+- ❌ Use documentclass or header-includes in YAML
+
+**WHY THIS MATTERS:**
+- Eisvogel template has generous spacing
+- 400-500 words = 2 pages (WRONG!)
+- 300-400 words = 1 page (CORRECT!)
+- Hiring managers expect 1-page cover letters
+- 2-page cover letters look unprofessional
 
 ### Structure for Product Roles
 
@@ -876,6 +900,113 @@ You may want to manually research:
 
 Proceed? (yes/no)
 ```
+
+---
+
+## PHASE 5: MANDATORY VALIDATION (MUST RUN!)
+
+**CRITICAL:** After generating the PDF, you MUST validate formatting to ensure 1-page requirement.
+
+### Step 5A: Automated Validation Checks
+
+Run these bash commands immediately after PDF generation:
+
+```bash
+# Check 1: Verify PDF was created
+ls -lh ArturSwadzba_CoverLetter_[CompanyName].pdf
+
+# Check 2: Count pages (MUST be 1)
+pdfinfo ArturSwadzba_CoverLetter_[CompanyName].pdf | grep Pages
+
+# Check 3: Check file size (should be 10-20KB)
+du -h ArturSwadzba_CoverLetter_[CompanyName].pdf
+
+# Check 4: Verify A4 paper size
+pdfinfo ArturSwadzba_CoverLetter_[CompanyName].pdf | grep "Page size"
+```
+
+### Step 5B: Validation Script (Preferred)
+
+**Use the cover letter validation script for comprehensive checking:**
+
+```bash
+python scripts/validate-cover-letter.py "applications/YYYY-MM-Company-Role/ArturSwadzba_CoverLetter_Company.pdf" "applications/YYYY-MM-Company-Role/ArturSwadzba_CoverLetter_Company.md"
+```
+
+**Expected output:**
+```
+✅ PASS: File exists
+✅ PASS: File size in optimal range (12-18KB)
+✅ PASS: Exactly 1 page
+✅ PASS: A4 paper size
+✅ PASS: Word count 300-400 words
+✅ PASS: Clean YAML (no problematic elements)
+✅ OVERALL: PERFECT - Cover letter formatting is correct!
+```
+
+### Step 5C: What to Check
+
+**MUST PASS (Critical):**
+1. ✅ **Page count = 1** (NOT 2 or more)
+2. ✅ **Word count: 300-400** (NOT 450-500)
+3. ✅ **Paper size: A4** (595 x 842 pts)
+4. ✅ **File size: 10-20KB** (typical for Eisvogel)
+
+**SHOULD PASS (Important):**
+5. ✅ Generated with XeLaTeX (Eisvogel indicator)
+6. ✅ Clean YAML (no documentclass, header-includes)
+
+### Step 5D: If Validation FAILS
+
+**If page count > 1:**
+
+🚨 **STOP! Cover letter is too long!**
+
+**Remediation steps:**
+1. Count words in markdown file (should be 300-400, NOT 450-500)
+2. If > 400 words: **Condense the content**
+   - Shorten opening paragraph (2-3 sentences max)
+   - Combine or shorten middle paragraphs
+   - Tighten closing (2 sentences)
+3. Remove excessive `\vspace` commands (should be max 2)
+4. Regenerate PDF
+5. Re-run validation
+
+**Example word count check:**
+```bash
+# Count words in cover letter body (exclude YAML and signature)
+sed -n '/^Dear/,/^Warm regards/p' ArturSwadzba_CoverLetter_Company.md | wc -w
+```
+
+**Target distribution (350 words total):**
+- Opening paragraph: 60-80 words
+- Body paragraph 1: 80-100 words
+- Body paragraph 2: 80-100 words
+- Body paragraph 3: 60-80 words (if needed)
+- Closing paragraph: 40-50 words
+
+**If file size wrong:**
+- Too small (<10KB): Missing Eisvogel fonts (check pandoc command)
+- Too large (>25KB): Unusual, check for embedded images
+
+**If wrong paper size:**
+- Regenerate with correct pandoc command
+- Ensure YAML has A4-compatible margins
+
+### Step 5E: Success Criteria
+
+**Before proceeding, confirm:**
+- [ ] PDF generated successfully
+- [ ] Exactly 1 page (verified with pdfinfo)
+- [ ] Word count 300-400 (verified in markdown)
+- [ ] A4 paper size (595 x 842 pts)
+- [ ] File size 10-20KB
+- [ ] Looks professional when opened
+
+**Only after ALL checks pass:**
+- Update cover-letter-log.md with validation results
+- Inform user that cover letter is ready
+- Provide file path
 
 ---
 
