@@ -124,6 +124,9 @@ __pycache__/
 venv/
 ENV/
 
+# Browser data (LinkedIn session)
+.browser_data/
+
 # ============================================
 # CREDENTIALS AND SECRETS
 # ============================================

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 LinkedIn Job Discovery & Scraping Automation
 
@@ -15,11 +16,19 @@ Usage:
 import argparse
 import json
 import re
+import sys
 import time
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional
 from playwright.sync_api import sync_playwright, Page, Browser
+
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except:
+        pass  # Fallback if reconfigure not available
 
 
 class LinkedInJobSearcher:
@@ -35,18 +44,22 @@ class LinkedInJobSearcher:
         'any_time': ''
     }
 
-    def __init__(self, headless: bool = True, slow_mo: int = 100):
+    def __init__(self, headless: bool = True, slow_mo: int = 100, user_data_dir: Optional[str] = None):
         """
         Initialize the searcher.
 
         Args:
             headless: Run browser in headless mode
             slow_mo: Slow down operations by N milliseconds (helps avoid detection)
+            user_data_dir: Directory to store browser session (stays logged in)
         """
         self.headless = headless
         self.slow_mo = slow_mo
+        self.user_data_dir = user_data_dir
         self.browser: Optional[Browser] = None
+        self.context = None
         self.page: Optional[Page] = None
+        self.playwright = None
 
     def build_search_url(
         self,
@@ -97,23 +110,117 @@ class LinkedInJobSearcher:
         return f"{self.BASE_URL}?{query_string}"
 
     def start_browser(self):
-        """Start Playwright browser."""
-        playwright = sync_playwright().start()
-        self.browser = playwright.chromium.launch(
-            headless=self.headless,
-            slow_mo=self.slow_mo
-        )
-        self.page = self.browser.new_page()
+        """Start Playwright browser with persistent context if configured."""
+        self.playwright = sync_playwright().start()
 
-        # Set user agent to look more human
-        self.page.set_extra_http_headers({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        if self.user_data_dir:
+            # Use persistent context (stays logged in)
+            print(f"  💾 Using persistent browser session: {self.user_data_dir}")
+            self.context = self.playwright.chromium.launch_persistent_context(
+                user_data_dir=self.user_data_dir,
+                headless=self.headless,
+                slow_mo=self.slow_mo,
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            )
+            self.page = self.context.pages[0] if self.context.pages else self.context.new_page()
+        else:
+            # Regular browser (no session persistence)
+            self.browser = self.playwright.chromium.launch(
+                headless=self.headless,
+                slow_mo=self.slow_mo
+            )
+            self.page = self.browser.new_page()
+
+            # Set user agent to look more human
+            self.page.set_extra_http_headers({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            })
 
     def close_browser(self):
         """Close browser."""
-        if self.browser:
+        if self.context:
+            self.context.close()
+        elif self.browser:
             self.browser.close()
+
+        if self.playwright:
+            self.playwright.stop()
+
+    def check_login_status(self) -> bool:
+        """
+        Check if user is logged into LinkedIn.
+
+        Returns:
+            True if logged in, False otherwise
+        """
+        try:
+            # Navigate to LinkedIn feed (requires login)
+            self.page.goto('https://www.linkedin.com/feed/', wait_until='networkidle', timeout=10000)
+            time.sleep(2)
+
+            # Check if we're on the login page or feed
+            current_url = self.page.url
+
+            if '/login' in current_url or '/checkpoint' in current_url:
+                return False
+
+            # Check for feed elements (indicates logged in)
+            try:
+                self.page.wait_for_selector('.feed-shared-update-v2', timeout=5000)
+                return True
+            except:
+                return False
+
+        except Exception as e:
+            print(f"  ⚠️ Could not check login status: {e}")
+            return False
+
+    def ensure_logged_in(self):
+        """
+        Ensure user is logged into LinkedIn.
+        Pauses for manual login if needed.
+        """
+        print("\n🔐 Checking LinkedIn login status...")
+
+        if not self.browser and not self.context:
+            self.start_browser()
+
+        is_logged_in = self.check_login_status()
+
+        if is_logged_in:
+            print("  ✅ Already logged in to LinkedIn")
+            return
+
+        print("\n  ⚠️ Not logged in to LinkedIn")
+        print("\n" + "="*80)
+        print("MANUAL LOGIN REQUIRED")
+        print("="*80)
+        print("\nThe browser window is now showing LinkedIn's login page.")
+        print("\nPlease:")
+        print("  1. Log in to your LinkedIn account in the browser window")
+        print("  2. Complete any 2FA/security checks if prompted")
+        print("  3. Wait until you see your LinkedIn feed")
+        print("  4. Then come back here and press ENTER to continue")
+        print("\nThe script will pause and wait for you...")
+        print("="*80 + "\n")
+
+        # Navigate to login page
+        self.page.goto('https://www.linkedin.com/login')
+
+        # Wait for user to log in manually
+        input("Press ENTER after you've logged in to LinkedIn... ")
+
+        # Verify login successful
+        print("\n  🔍 Verifying login...")
+        if self.check_login_status():
+            print("  ✅ Login successful! Session will be saved for future runs.")
+
+            if self.user_data_dir:
+                print(f"  💾 Session saved to: {self.user_data_dir}")
+                print("  ℹ️  Next time you run this script, you won't need to log in again!")
+        else:
+            print("  ❌ Login verification failed. Please try again.")
+            raise Exception("LinkedIn login failed")
 
     def scroll_to_load_all_jobs(self, max_scrolls: int = 10):
         """
@@ -222,15 +329,18 @@ class LinkedInJobSearcher:
         Returns:
             List of job dictionaries
         """
+        # Ensure logged in before searching
+        if not self.browser and not self.context:
+            self.start_browser()
+
+        self.ensure_logged_in()
+
         url = self.build_search_url(keywords, location, date_posted, experience_level)
 
         print(f"\n🔍 Searching LinkedIn Jobs:")
         print(f"  Keywords: {keywords}")
         print(f"  Location: {location}")
         print(f"  Date: {date_posted}")
-
-        if not self.browser:
-            self.start_browser()
 
         try:
             # Navigate to search URL
@@ -423,6 +533,8 @@ def main():
                        help='Use career-preferences.md for search criteria')
     parser.add_argument('--headless', action='store_true',
                        help='Run browser in headless mode')
+    parser.add_argument('--no-persist', action='store_true',
+                       help='Don\'t save browser session (will need to log in each time)')
 
     args = parser.parse_args()
 
@@ -430,6 +542,11 @@ def main():
     project_root = Path(__file__).parent.parent
     staging_dir = project_root / 'staging'
     applications_dir = project_root / 'applications'
+    browser_data_dir = project_root / '.browser_data' if not args.no_persist else None
+
+    # Create browser data directory if using persistent context
+    if browser_data_dir:
+        browser_data_dir.mkdir(exist_ok=True)
 
     # Create batch name
     batch_name = datetime.now().strftime('%Y-%m-%d-discovery-batch')
@@ -473,7 +590,11 @@ def main():
         ]
 
     # Initialize searcher and deduplicator
-    searcher = LinkedInJobSearcher(headless=args.headless, slow_mo=100)
+    searcher = LinkedInJobSearcher(
+        headless=args.headless,
+        slow_mo=100,
+        user_data_dir=str(browser_data_dir) if browser_data_dir else None
+    )
     deduplicator = JobDeduplicator(applications_dir)
 
     try:
