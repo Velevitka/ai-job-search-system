@@ -36,8 +36,10 @@ javascript:(function(){'use strict';function extractLinkedInJob(){const data={ur
 1. Go to any LinkedIn job posting (e.g., https://www.linkedin.com/jobs/view/...)
 2. Click the "Save Job" bookmark in your bookmarks bar
 3. You should see an alert: "✅ Job saved!"
-4. A markdown file should download
-5. Save it to `staging/manual-saves/`
+4. **A markdown file downloads to your Downloads folder** (browser security limitation)
+5. **Move the file** from Downloads to `staging/manual-saves/`
+
+**Note:** Browsers can't automatically save to custom folders for security reasons. You'll need to manually move files from Downloads to `staging/manual-saves/` after each save (or save multiple, then move them all at once).
 
 ---
 

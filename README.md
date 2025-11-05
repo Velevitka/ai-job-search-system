@@ -40,11 +40,11 @@ mkdir -p master applications insights staging archive
 
 3. Add your master CV to `master/YourName_MasterCV.docx`
 
-4. Install the job saving bookmarklet (see [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md))
+4. Install the job saving bookmarklet (see [BOOKMARKLET-GUIDE.md](docs/usage/bookmarklet/BOOKMARKLET-GUIDE.md))
 
 5. Review and customize the commands in `.claude/commands/` to match your needs
 
-See [SETUP.md](SETUP.md) for detailed setup instructions.
+See [SETUP.md](docs/setup/SETUP.md) for detailed setup instructions.
 
 ### First Application
 
@@ -72,7 +72,7 @@ Company: [CompanyName]
 Status: applied
 ```
 
-See [USAGE-GUIDE.md](USAGE-GUIDE.md) for detailed usage instructions.
+See [USAGE-GUIDE.md](docs/usage/USAGE-GUIDE.md) for detailed usage instructions.
 
 ## 📁 Folder Structure
 
@@ -108,7 +108,7 @@ See [USAGE-GUIDE.md](USAGE-GUIDE.md) for detailed usage instructions.
 3. Job automatically saved to `staging/manual-saves/`
 4. Run bulk analysis on saved jobs
 
-See [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md) for setup and usage.
+See [BOOKMARKLET-GUIDE.md](docs/usage/bookmarklet/BOOKMARKLET-GUIDE.md) for setup and usage.
 
 ### CV Tailoring with Anti-Hallucination Safeguards
 - Creates tailoring plan for human review before generation
@@ -145,7 +145,7 @@ This system was built for Product Management roles but can be adapted:
 2. Modify CV structure in `generate-cv.md` for your field's conventions
 3. Adjust fit scoring in `analyze-job.md` based on what matters in your domain
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to adapt for other fields.
+See [CONTRIBUTING.md](docs/reference/CONTRIBUTING.md) for how to adapt for other fields.
 
 ## 📋 Complete Application Workflow
 
@@ -159,36 +159,29 @@ Use the browser bookmarklet to quickly save jobs while browsing:
 
 **While on LinkedIn Jobs:**
 1. Browse to a job posting
-2. Click "Save to Staging" bookmarklet in your bookmarks bar
-3. Job automatically saved to `staging/manual-saves/`
+2. Click "Save Job" bookmarklet in your bookmarks bar
+3. Job automatically downloads to your Downloads folder
+4. Move files to `staging/manual-saves/`
 
 **Process saved jobs:**
 ```bash
-python scripts/process_saved_jobs.py
-# Organizes jobs, checks for duplicates
-# Ready for bulk analysis
+/bulk-process staging/manual-saves
+# Analyzes all jobs, calculates fit scores
+# Creates comprehensive BULK-PROCESS-SUMMARY.md
 ```
 
 **Output:**
 ```
-staging/2025-11-05-saved-jobs/
-├── Spotify-DirectorProductGrowth/
-│   └── job-description.md
-├── Monzo-HeadOfDataPlatform/
-│   └── job-description.md
-└── ... (18 more jobs)
+BULK-PROCESS-SUMMARY.md with:
+- Tier 1 (8-10 fit): Apply immediately
+- Tier 2 (6-7 fit): Research further
+- Tier 3 (4-5 fit): Maybe
+- Archive (<4 fit): Skip
 ```
 
-**Next:** Run bulk analysis on saved jobs:
-```bash
-python scripts/bulk_analyze.py staging/2025-11-05-saved-jobs
-# Reviews BULK-ANALYSIS-SUMMARY.md sorted by fit score
-# Apply to 8+ fit roles
-```
+**Time saved:** 1-2 minutes per job vs. manual copy/paste
 
-**Time saved:** 1-2 minutes vs. manual copy/paste
-
-See [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md) for bookmarklet setup.
+See [BOOKMARKLET-GUIDE.md](docs/usage/bookmarklet/BOOKMARKLET-GUIDE.md) for bookmarklet setup.
 
 ---
 
@@ -435,7 +428,7 @@ python scripts/validate-cover-letter.py <cl.pdf> [<cl.md>]
 - Catches issues before submission
 - Automated - no manual checking needed
 
-See `docs/cv-formatting-guardrails.md` and `docs/cover-letter-formatting-guardrails.md` for details.
+See `docs/formatting/cv-formatting-guardrails.md` and `docs/formatting/cover-letter-formatting-guardrails.md` for details.
 
 ## 🛡️ Privacy & Data Protection
 
@@ -448,10 +441,23 @@ The `.gitignore` is configured to protect all personal data.
 
 ## 📚 Documentation
 
-- [SETUP.md](SETUP.md) - Initial setup instructions
-- [USAGE-GUIDE.md](USAGE-GUIDE.md) - Detailed usage guide
-- [GIT-SETUP-GUIDE.md](GIT-SETUP-GUIDE.md) - How to safely publish to GitHub
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+### Setup & Usage
+- [SETUP.md](docs/setup/SETUP.md) - Initial setup instructions
+- [USAGE-GUIDE.md](docs/usage/USAGE-GUIDE.md) - Detailed usage guide
+- [QUICK-WORKFLOW.md](docs/usage/QUICK-WORKFLOW.md) - Quick reference workflow
+- [BOOKMARKLET-GUIDE.md](docs/usage/bookmarklet/BOOKMARKLET-GUIDE.md) - Job saving bookmarklet
+
+### Reference
+- [ROADMAP.md](docs/reference/ROADMAP.md) - Future plans and enhancements
+- [CONTRIBUTING.md](docs/reference/CONTRIBUTING.md) - Contribution guidelines
+- [GIT-SETUP-GUIDE.md](docs/setup/GIT-SETUP-GUIDE.md) - How to safely publish to GitHub
+
+### Formatting & Validation
+- [CV Formatting Guardrails](docs/formatting/cv-formatting-guardrails.md)
+- [Cover Letter Formatting Guardrails](docs/formatting/cover-letter-formatting-guardrails.md)
+
+### History
+- [SUNSET-SUMMARY.md](docs/history/SUNSET-SUMMARY.md) - Why automated scraping was deprecated
 
 ## 🤝 Contributing
 
@@ -461,7 +467,7 @@ Contributions welcome! Especially:
 - CV formatting improvements
 - Analytics enhancements
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](docs/reference/CONTRIBUTING.md) for guidelines.
 
 ## 📄 License
 

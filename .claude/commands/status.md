@@ -38,12 +38,12 @@ Generate a comprehensive current status report by:
 
 **Check for analyzed roles not yet applied:**
 - Scan `applications/` folders without complete PDFs
-- Check `ARCHIVE-SUMMARY.md` for analyzed roles
-- Cross-reference with `ROADMAP.md` for priority order
+- Check `docs/history/ARCHIVE-SUMMARY.md` for analyzed roles
+- Cross-reference with `docs/reference/ROADMAP.md` for priority order
 
 **Priority ranking:**
 1. Tier 1 roles (fit 9-10) - apply immediately
-2. Strategic priorities from ROADMAP.md (e.g., Update Master CV)
+2. Strategic priorities from docs/reference/ROADMAP.md (e.g., Update Master CV)
 3. Tier 2 roles (fit 8-9) - apply this week
 4. Geographic expansion opportunities
 
@@ -57,7 +57,7 @@ Read `insights/metrics-dashboard.md` for:
 
 ### 4. Consult Strategic Documents
 
-**ROADMAP.md:**
+**docs/reference/ROADMAP.md:**
 - Current week priorities
 - Strategic improvements (e.g., AI product positioning)
 - Time-sensitive actions
@@ -181,7 +181,7 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 
 ## Strategic Opportunities
 
-**From ROADMAP.md:**
+**From docs/reference/ROADMAP.md:**
 - [ ] [Strategic improvement that benefits multiple applications]
 - [ ] [Long-term investment opportunity]
 
@@ -227,8 +227,8 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 
 ✅ `applications/*/status.md` - Individual application status
 ✅ `insights/metrics-dashboard.md` - Aggregate metrics
-✅ `ROADMAP.md` - Strategic priorities
-✅ `ARCHIVE-SUMMARY.md` - Historical context (verified not used for current state)
+✅ `docs/reference/ROADMAP.md` - Strategic priorities
+✅ `docs/history/ARCHIVE-SUMMARY.md` - Historical context (verified not used for current state)
 [✅/❌] `STATUS.md` - Single source of truth (if exists, compare for consistency)
 
 ---
@@ -256,11 +256,11 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 - `insights/metrics-dashboard.md` - Aggregate statistics
 
 **For planning:**
-- `ROADMAP.md` - Strategic priorities and improvements
+- `docs/reference/ROADMAP.md` - Strategic priorities and improvements
 - `career-preferences.md` - Role criteria and preferences
 
 **For history:**
-- `ARCHIVE-SUMMARY.md` - Snapshot from Oct 31 (⚠️ historical only)
+- `docs/history/ARCHIVE-SUMMARY.md` - Snapshot from Oct 31 (⚠️ historical only)
 - `insights/patterns.md` - Learnings from applications
 
 ---
@@ -282,7 +282,7 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 2. **Calculate days waiting** - Use today's date (2025-11-05) minus application date
 3. **Trust hierarchy:** Application folders > metrics-dashboard > other docs
 4. **Flag inconsistencies** - If files conflict, report it clearly
-5. **Never use ARCHIVE-SUMMARY.md** for current state - it's historical only
+5. **Never use docs/history/ARCHIVE-SUMMARY.md** for current state - it's historical only
 6. **WRITE STATUS.md FILE** - After generating report, use Write tool to save it
 7. **Add timestamp** - Include generation date/time in ISO format
 8. **Validate before writing** - Check all data for consistency
@@ -291,7 +291,7 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 - [ ] All application folders checked
 - [ ] All status.md files read
 - [ ] Metrics dashboard consulted
-- [ ] ROADMAP.md priorities reviewed
+- [ ] docs/reference/ROADMAP.md priorities reviewed
 - [ ] Days calculated correctly
 - [ ] Inconsistencies flagged
 
@@ -313,7 +313,7 @@ Use the Write tool to create/overwrite `STATUS.md` with the generated content.
 2. Read each status.md file (parse status, dates, fit scores)
 3. Check for PDFs in each folder (verify completion)
 4. Read metrics-dashboard.md (for aggregate context)
-5. Read ROADMAP.md (for strategic priorities)
+5. Read docs/reference/ROADMAP.md (for strategic priorities)
 6. **VALIDATE:** Check for inconsistencies between sources
 7. **CALCULATE:** Days waiting, averages, counts, stats
 8. **GENERATE:** Comprehensive status report markdown

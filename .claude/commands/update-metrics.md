@@ -310,7 +310,7 @@ Use the Write tool to create/overwrite the file.
 - `insights/patterns.md` - Qualitative learnings and insights
 
 **For planning:**
-- `ROADMAP.md` - Strategic priorities
+- `docs/reference/ROADMAP.md` - Strategic priorities
 - `career-preferences.md` - Role criteria
 
 ---

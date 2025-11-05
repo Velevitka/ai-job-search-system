@@ -27,6 +27,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 
 class JobDeduplicator:
     """Check if job already exists in applications folder."""
