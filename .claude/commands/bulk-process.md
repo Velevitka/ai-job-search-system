@@ -17,53 +17,249 @@ No arguments needed - scans the `staging/` folder automatically.
 
 ### Step 1: Scan Staging Folder
 
-Look for files in `staging/`:
+Look for files in `staging/` (root level only, not subfolders):
+- **MHTML files** (.mhtml) - **NEW:** LinkedIn saved pages
 - PDF files (job description PDFs)
 - Images/screenshots (PNG, JPG)
 - Text files (.txt, .md)
 - Word documents (.docx)
 - HTML documents
 
+**Note:** Files already organized in subfolders (tier1/, tier2/, archive/) are ignored - only process unorganized files in staging root.
+
+**Display inventory:**
+```
+🔍 Scanning staging/ folder...
+
+**Files found:** 56 files
+- MHTML (LinkedIn): 54 files
+- PDF: 2 files
+- Images: 0 files
+- Text: 0 files
+
+**Subfolders detected:**
+- staging/tier1/ (5 files - previously analyzed)
+- staging/archive/ (12 files - previously archived)
+
+**Will analyze:** 56 new files (subfolders ignored)
+```
+
 If folder is empty:
 ```
 ℹ️ No files found in staging/
 
 To use bulk processing:
-1. Save job description PDFs, screenshots, or text files to staging/
+1. Save job descriptions to staging/:
+   - LinkedIn: Save page as MHTML (Ctrl+S)
+   - PDFs: Download JD PDFs
+   - Screenshots: Save job posting images
 2. Run `/bulk-process`
-3. Review prioritized list and decide which to pursue
+3. Review prioritized list
+4. Files auto-organized into tier folders
 ```
 
 ### Step 2: Extract Job Descriptions
 
-For each file:
-1. **PDFs:** Extract text content
+For each file, extract company name, job title, and job description text:
+
+#### MHTML Files (LinkedIn - NEW)
+
+**MHTML structure:**
+- MHTML = MIME HTML (multipart format with embedded resources)
+- Contains HTML content wrapped in MIME boundaries
+- Saved from LinkedIn job postings via "Save Page As" → "Webpage, Complete"
+
+**Extraction process:**
+```
+1. Read mhtml file
+2. Find MIME boundary (------MultipartBoundary--)
+3. Extract Content-Type: text/html section
+4. Parse HTML to find job description
+5. LinkedIn job pages have structure:
+   - Job title in <h1> or page title
+   - Company name in metadata or breadcrumb
+   - Job description in specific div/section
+   - Look for "About the job" section
+6. Extract clean text from HTML
+```
+
+**Key sections to extract:**
+- Job title (from filename or HTML title tag)
+- Company name (from filename: "Company Name _ LinkedIn.mhtml")
+- Job description (search for "About the job", "responsibilities", "requirements")
+- Location (if available in content)
+- Seniority level (parse from title: Senior, Lead, Director, VP)
+
+**Filename parsing:**
+- Pattern: `(1) Job Title _ Company Name _ LinkedIn.mhtml`
+- Extract: Company = text between first "_" and "_ LinkedIn"
+- Extract: Job Title = text after "(1)" and before first "_"
+
+**Example:**
+```
+File: "(1) Director of Product - Data Platform _ Angi _ LinkedIn.mhtml"
+→ Company: Angi
+→ Job Title: Director of Product - Data Platform
+→ Source: LinkedIn
+```
+
+#### Other File Types
+
+1. **PDFs:** Extract text content using available PDF tools
 2. **Images:** Use OCR or vision capabilities to read job description
-3. **Text/Markdown/HTML:** Read directly
+3. **Text/Markdown/HTML:** Read directly and parse
 4. **Word docs:** Extract text content
 
-### Step 3: Run Quick Analysis
+### Step 3: Pre-Filter Using Career Preferences
 
-For each job description, perform abbreviated analysis:
+**BEFORE detailed analysis, check `career-preferences.md` for deal-breakers:**
+
+**Auto-filter out (don't analyze):**
+- ❌ Dubai/Bangkok relocations (unless preferences changed)
+- ❌ Pure engineering roles (not PM)
+- ❌ Roles requiring specific tech stacks not in your background
+- ❌ Explicit B2B SaaS-only if you have B2C background
+
+**Flag for geographic expansion:**
+- ⚠️ Singapore/Australia/Canada (strategic targets, analyze but note visa requirement)
+
+**Location scoring:**
+- London/Remote UK: High priority (no visa)
+- EU (Amsterdam, Dublin, Berlin): High priority (Polish passport)
+- Singapore/AU/CA: Medium priority (visa sponsorship needed)
+- Other: Evaluate case-by-case
+
+**Report pre-filter results:**
+```
+**Pre-filtering complete:**
+- Total files: 56
+- Auto-filtered: 8 (Dubai: 3, Pure AI Engineer: 2, Other: 3)
+- Analyzing: 48 roles
+```
+
+### Step 4: Run Quick Analysis
+
+For each non-filtered job description, perform abbreviated analysis:
 
 **Extract:**
-- Company name
-- Job title
-- Role level (IC / Senior / Lead / Director / VP)
+- Company name (from filename or content)
+- Job title (from filename or content)
+- Role level (IC / Senior / Lead / Director / VP / Head of)
+- Location (from content)
+- Industry (if identifiable)
 - Key requirements (top 3-5)
 - Keywords (5-7 most important)
 
-**Calculate:**
-- Fit score (X/10) based on master CV
-- 1-2 sentence justification for score
+**Calculate fit score (0-10) using quick heuristics:**
+
+**Keyword matching (0-5 points):**
+- "data platform", "CDP": +1.5 points
+- "MarTech", "AdTech", "marketing technology": +1 point
+- "growth", "experimentation", "A/B testing": +1 point
+- "marketplace", "two-sided platform": +1 point
+- "travel", "hospitality", "vacation": +1.5 points (domain match)
+- Other relevant keywords: +0.5 points each
+
+**Seniority match (0-2 points):**
+- Director/Head of/VP: +2 (target level)
+- Lead/Principal PM: +1 (acceptable)
+- Senior PM: +0 (too junior)
+- IC PM: -1 (way too junior)
+
+**Location bonus (0-2 points):**
+- London: +2 (ideal)
+- Remote UK/EU: +1.5 (excellent)
+- EU cities (Amsterdam, Berlin, Dublin): +1 (Polish passport advantage)
+- Singapore/AU/CA: +0.5 (neutral, requires visa)
+
+**Industry bonus (0-1 point):**
+- Travel/Hospitality: +1 (strong domain match)
+- FinTech/Payments: +0.5 (Chase experience)
+- MarTech/AdTech: +0.5 (platform experience)
+
+**Total fit score = Keyword + Seniority + Location + Industry (capped at 10)**
 
 **Identify:**
 - Top 1-2 strong alignment points
 - Top 1-2 gaps or concerns
+- 1-2 sentence justification for score
 
 **Note:** This is a *quick* analysis, not the full detailed analysis. Goal is triage and prioritization.
 
-### Step 4: Create Bulk Analysis Summary
+### Step 5: Organize Staging Folder
+
+**AFTER analysis, automatically organize files into subfolders:**
+
+**Create folder structure:**
+```bash
+mkdir -p staging/tier1-apply-now
+mkdir -p staging/tier2-research
+mkdir -p staging/tier3-maybe
+mkdir -p staging/archive
+```
+
+**Move files based on fit scores:**
+
+```bash
+# Tier 1: High priority (Fit 8-10)
+# Move to staging/tier1-apply-now/
+mv "staging/[high-fit-file].mhtml" "staging/tier1-apply-now/"
+
+# Tier 2: Worth exploring (Fit 6-7)
+# Move to staging/tier2-research/
+mv "staging/[medium-fit-file].mhtml" "staging/tier2-research/"
+
+# Tier 3: Low priority (Fit 4-5)
+# Move to staging/tier3-maybe/
+mv "staging/[low-fit-file].mhtml" "staging/tier3-maybe/"
+
+# Archive: Skip (Fit <4 or auto-filtered)
+# Move to staging/archive/
+mv "staging/[filtered-file].mhtml" "staging/archive/"
+```
+
+**Folder purposes:**
+
+```
+staging/
+├── tier1-apply-now/       # Fit 8-10: Apply this week
+│   ├── [Company A].mhtml
+│   ├── [Company B].mhtml
+│   └── [Company C].mhtml  (5 files)
+│
+├── tier2-research/        # Fit 6-7: Research and consider
+│   ├── [Company D].mhtml
+│   └── [Company E].mhtml  (12 files)
+│
+├── tier3-maybe/           # Fit 4-5: Only if capacity
+│   └── [Company F].mhtml  (8 files)
+│
+├── archive/               # Filtered out or <4 fit
+│   ├── filtered/          # Auto-filtered (location, etc.)
+│   └── low-fit/           # Analyzed but poor fit
+│
+└── [New unsorted files]   # Future bulk process batches
+```
+
+**Display reorganization summary:**
+```
+📁 Staging folder organized!
+
+**File movements:**
+- tier1-apply-now/: 5 files (Fit 8-10)
+- tier2-research/: 12 files (Fit 6-7)
+- tier3-maybe/: 8 files (Fit 4-5)
+- archive/: 31 files (filtered or <4 fit)
+
+**Staging root:** Empty (all files organized)
+
+**Next actions:**
+1. Start with tier1-apply-now/ folder
+2. Run /analyze-job for each high-priority role
+3. Apply to top 3-5 this week
+```
+
+### Step 6: Create Bulk Analysis Summary
 
 Create: `insights/bulk-analysis-YYYY-MM-DD.md`
 
@@ -207,25 +403,39 @@ Apply to these **[X] roles** first:
 
 ---
 
-## File Management
+## File Management (Auto-Organized)
 
-After reviewing this analysis:
+✅ **Files are automatically organized after analysis!**
 
-**For roles you'll pursue:**
-```bash
-# Move JD from staging to create full analysis
-/analyze-job [URL or paste JD]
-# This will create proper application folder
+**Folder structure created:**
+```
+staging/
+├── tier1-apply-now/       # Your next actions (Fit 8-10)
+├── tier2-research/        # Research these companies (Fit 6-7)
+├── tier3-maybe/           # Consider if capacity (Fit 4-5)
+└── archive/               # Filtered or low fit (Fit <4)
 ```
 
-**For roles you're skipping:**
-- Move staging files to `staging/archive/`
-- Keep staging/ clean for next batch
+**For tier1 roles (apply now):**
+```bash
+# Open mhtml file to review full JD
+# Then analyze in detail:
+/analyze-job [paste JD from mhtml]
+# Creates application folder with full analysis
+```
 
-**For roles you're unsure about:**
-- Leave in staging/ for now
-- Revisit after applying to top priorities
-- Run `/analyze-job` if you decide to pursue
+**For tier2 roles (research):**
+- Company research first
+- Check employee reviews, culture fit
+- Run `/analyze-job` for most interesting
+
+**For tier3 roles (maybe):**
+- Keep for future if tier1/tier2 exhausted
+- Revisit in 2-4 weeks if still looking
+
+**For archive:**
+- Already filtered, no action needed
+- Can delete after 30 days to free space
 
 ---
 
@@ -258,27 +468,63 @@ After reviewing this analysis:
 
 Display:
 ```
-📊 Bulk processing complete!
+✅ Bulk processing complete!
 
-📁 Generated: insights/bulk-analysis-YYYY-MM-DD.md
+📊 **Analysis:**
+- Files analyzed: 56
+- Auto-filtered: 8 (Dubai: 3, location mismatch: 5)
+- Analyzed: 48 roles
 
-### Summary
-- **Jobs analyzed:** X
-- **High priority (8-10):** Y jobs 🔥
-- **Medium priority (6-7):** Z jobs ⭐
-- **Low/Skip (1-5):** W jobs
+🎯 **Results by Priority:**
+- 🔥 Tier 1 (High - Fit 8-10): 5 roles
+- ⭐ Tier 2 (Medium - Fit 6-7): 12 roles
+- ⚠️ Tier 3 (Low - Fit 4-5): 8 roles
+- ❌ Archive (Skip - Fit <4): 23 roles
 
-### Top 3 Recommendations
-1. [Company A] - [Role] - Fit: X/10
-2. [Company B] - [Role] - Fit: Y/10
-3. [Company C] - [Role] - Fit: Z/10
+📁 **Staging organized:**
+- ✅ staging/tier1-apply-now/ → 5 files (START HERE)
+- ✅ staging/tier2-research/ → 12 files
+- ✅ staging/tier3-maybe/ → 8 files
+- ✅ staging/archive/ → 31 files
 
-### Next Steps
-1. Review full analysis in insights/bulk-analysis-YYYY-MM-DD.md
-2. Run `/analyze-job` for top priority roles
-3. Clear processed files from staging/
+📄 **Report generated:** insights/bulk-analysis-YYYY-MM-DD.md
 
-⏱️ **Estimated application time for top 3:** [X-Y hours]
+---
+
+🔥 **Top 3 Opportunities (Apply This Week):**
+
+1. **[Company A] - [Role]** (Fit: 9/10)
+   - Location: London
+   - Why: Perfect data platform + travel domain match
+   - File: staging/tier1-apply-now/[Company A].mhtml
+   - Next: `/analyze-job` with full JD
+
+2. **[Company B] - [Role]** (Fit: 8.5/10)
+   - Location: Remote UK
+   - Why: MarTech platform + growth PM + Director level
+   - File: staging/tier1-apply-now/[Company B].mhtml
+   - Next: `/analyze-job` with full JD
+
+3. **[Company C] - [Role]** (Fit: 8/10)
+   - Location: Amsterdam
+   - Why: Marketplace + EU mobility advantage
+   - File: staging/tier1-apply-now/[Company C].mhtml
+   - Next: `/analyze-job` with full JD
+
+---
+
+💡 **Next Actions:**
+1. Open staging/tier1-apply-now/ folder
+2. Review mhtml files for top 5 roles
+3. Run `/analyze-job` for detailed analysis (paste full JD)
+4. Apply to 3-5 highest-fit roles this week
+
+⏱️ **Estimated effort:**
+- Deep analysis (top 5): ~2 hours
+- Applications (top 3): ~6-9 hours total
+- Week 1 target: 3 applications from tier1
+
+📊 **Full details:** insights/bulk-analysis-YYYY-MM-DD.md
 ```
 
 ## Quality Notes

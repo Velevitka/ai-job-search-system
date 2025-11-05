@@ -468,6 +468,173 @@ Log each variable in `cover-letter-log.md` and `cv-tailoring-notes.md`, then cor
 
 ---
 
+### Priority 7: Automated Job Discovery & Scraping (NEXT FEATURE - Nov 2025)
+
+**Status:** Planned for implementation
+**Priority:** HIGH - Saves 2-3 hours/week on manual job searching
+
+**Problem Statement:**
+Currently spending significant time manually searching job boards (LinkedIn, Greenhouse, Lever, Indeed) and copy/pasting job descriptions. This is the most time-consuming part of the workflow.
+
+**Proposed Solution: Hybrid Approach**
+
+#### Phase 1: LinkedIn Search Scraper (Week 1)
+**Command:** `/discover-jobs` or automated script
+
+**Features:**
+- Use Playwright to search LinkedIn Jobs with criteria from `career-preferences.md`
+- Search parameters: keywords, location, seniority, date posted (past week)
+- Scrape search results (job cards: title, company, location, URL)
+- Handle infinite scroll/pagination to load all results
+- Deduplicate against existing `applications/*` folders
+- For each new job, scrape full description and save to `staging/`
+- Output: JSON summary + individual job-description.md files
+
+**Implementation:**
+```python
+# scripts/job_discovery.py
+class LinkedInJobSearcher:
+    - build_search_url(keywords, location, date_filter)
+    - search(criteria) -> list[job_urls]
+    - scrape_job_description(url) -> text
+    - deduplicate_against_applications()
+    - save_to_staging()
+```
+
+**Expected Output:**
+```
+staging/2025-11-05-discovery-batch/
+├── DISCOVERY-SUMMARY.json       # All jobs found with metadata
+├── Company1-Role1/
+│   └── job-description.md
+├── Company2-Role2/
+│   └── job-description.md
+└── ...
+```
+
+**Integration:**
+- Auto-trigger `/analyze-job` for each discovered job
+- Generate summary report sorted by fit score
+- Email/console notification of 8+ fit jobs
+
+---
+
+#### Phase 2: Scheduled Monitoring (Week 2)
+**Command:** Cron job or scheduled task
+
+**Features:**
+- Run daily at 9am
+- Execute LinkedIn searches automatically
+- Email summary of new 8+ fit jobs
+- Slack/Discord notification option
+- Track search effectiveness (which keywords yield best fits)
+
+**Implementation:**
+```bash
+# crontab
+0 9 * * * cd /path/to/cv && python scripts/job_discovery.py --auto
+```
+
+**Email Template:**
+```
+🎯 Daily Job Discovery Report - Nov 5, 2025
+
+New jobs discovered: 12
+After deduplication: 8 new jobs
+
+Tier 1 (9-10 fit): 2 jobs
+  1. Spotify - Director Product Growth (9.5/10) - Stockholm
+  2. Monzo - Head of Data Platform (9/10) - London
+
+Tier 2 (8-9 fit): 3 jobs
+  [List...]
+
+Full report: staging/2025-11-05-discovery-batch/SUMMARY.md
+```
+
+---
+
+#### Phase 3: Multi-Platform Support (Week 3)
+**Expand to:** Greenhouse, Lever, Indeed
+
+**Features:**
+- Greenhouse: Search across multiple company boards
+  - Use companies from bulk analysis (Tier 1-2 companies)
+  - Example: `https://boards.greenhouse.io/stripe`
+- Lever: Similar approach
+- Indeed: Public search API alternative
+
+**Company Board Monitoring:**
+```python
+# Monitor specific companies posting on Greenhouse/Lever
+TARGET_COMPANIES = [
+    'stripe', 'notion', 'figma', 'monzo', 'deliveroo',
+    'spotify', 'wise', 'revolut', 'booking', 'airbnb'
+]
+
+for company in TARGET_COMPANIES:
+    jobs = scrape_greenhouse(f"https://boards.greenhouse.io/{company}")
+    jobs += scrape_lever(f"https://jobs.lever.co/{company}")
+```
+
+---
+
+### FUTURE ENHANCEMENT: Company Page Scraping (Priority 8)
+
+**Problem Identified:**
+LinkedIn job descriptions are often abbreviated or differ from official company career pages. Following the "Apply" journey on LinkedIn often redirects to the company's actual posting with more detail.
+
+**Proposed Solution:**
+1. When scraping LinkedIn job, detect "Apply on company website" button
+2. Extract redirect URL (Greenhouse, Lever, Workable, custom career pages)
+3. Navigate to company page and scrape the **full, official** job description
+4. Fallback to LinkedIn description if company page unreachable
+
+**Implementation Approach:**
+```python
+def get_full_job_description(linkedin_url):
+    # 1. Load LinkedIn job page
+    # 2. Check for external apply button
+    # 3. Extract company careers URL
+    # 4. Navigate to company page
+    # 5. Scrape using platform-specific selectors
+    # 6. If fails, fallback to LinkedIn text
+
+    company_url = extract_apply_url(linkedin_page)
+
+    if 'greenhouse.io' in company_url:
+        return scrape_greenhouse_job(company_url)
+    elif 'lever.co' in company_url:
+        return scrape_lever_job(company_url)
+    elif 'workable.com' in company_url:
+        return scrape_workable_job(company_url)
+    else:
+        return scrape_linkedin_fallback(linkedin_url)
+```
+
+**Benefits:**
+- More accurate job requirements
+- Better fit score analysis (more complete data)
+- Captures details LinkedIn omits (team size, tech stack, etc.)
+- Avoids applying to outdated LinkedIn postings
+
+**Example:**
+```
+LinkedIn version:
+"Lead our data platform team. 5+ years experience required."
+
+Company page version (Greenhouse):
+"Lead our data platform team of 8 engineers. You'll own the roadmap for our
+lakehouse architecture (Snowflake, dbt, Airflow), drive adoption across 20+
+stakeholder teams, and report to the VP of Engineering. Tech stack: Python,
+Spark, Kubernetes. 5+ years in data platform PM or engineering required.
+Experience with CDP a plus."
+```
+
+**Timeline:** Q1 2026 (after core discovery automation is stable)
+
+---
+
 ## Roadmap Timeline
 
 ### ✅ Completed (October 2025)

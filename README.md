@@ -6,12 +6,13 @@ An intelligent job application system powered by Claude Code CLI that automates 
 
 This system uses Claude Code (Anthropic's CLI tool) to automate your entire job application workflow:
 
-1. **Analyze Job Descriptions** - Extract keywords, calculate fit scores, identify gaps
-2. **Tailor CVs Automatically** - Generate role-specific CVs from your master CV with Pandoc + Eisvogel template
-3. **Generate Cover Letters** - Create personalized cover letters based on job analysis
-4. **Track Applications** - Monitor status, response rates, and success metrics
-5. **Extract Insights** - Learn from your application patterns over time
-6. **Prepare for Interviews** - Generate company research and interview prep materials
+1. **🔍 Discover Jobs Automatically** - NEW: Search LinkedIn Jobs, scrape descriptions, deduplicate (saves 2-3 hrs/week)
+2. **Analyze Job Descriptions** - Extract keywords, calculate fit scores, identify gaps
+3. **Tailor CVs Automatically** - Generate role-specific CVs from your master CV with Pandoc + Eisvogel template
+4. **Generate Cover Letters** - Create personalized cover letters based on job analysis
+5. **Track Applications** - Monitor status, response rates, and success metrics
+6. **Extract Insights** - Learn from your application patterns over time
+7. **Prepare for Interviews** - Generate company research and interview prep materials
 
 ## 🚀 Quick Start
 
@@ -20,6 +21,7 @@ This system uses Claude Code (Anthropic's CLI tool) to automate your entire job 
 - **Claude Code CLI** installed ([Installation Guide](https://docs.claude.com/claude-code))
 - **Pandoc** with XeLaTeX ([Pandoc Installation](https://pandoc.org/installing.html))
 - **Eisvogel template** for professional PDFs ([Template](https://github.com/Wandmalfarbe/pandoc-latex-template))
+- **Python 3.x** + **Playwright** (for job discovery automation)
 - A master CV (your comprehensive CV with all achievements)
 - Basic command line knowledge
 
@@ -31,14 +33,20 @@ git clone https://github.com/yourusername/ai-job-search-system.git
 cd ai-job-search-system
 ```
 
-2. Create the required folder structure:
+2. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+python -m playwright install chromium
+```
+
+3. Create the required folder structure:
 ```bash
 mkdir -p master applications insights staging archive
 ```
 
-3. Add your master CV to `master/YourName_MasterCV.docx`
+4. Add your master CV to `master/YourName_MasterCV.docx`
 
-4. Review and customize the commands in `.claude/commands/` to match your needs
+5. Review and customize the commands in `.claude/commands/` to match your needs
 
 See [SETUP.md](SETUP.md) for detailed setup instructions.
 
@@ -90,6 +98,21 @@ See [USAGE-GUIDE.md](USAGE-GUIDE.md) for detailed usage instructions.
 
 ## 🎨 Key Features
 
+### 🔍 Automated Job Discovery (NEW - Nov 2025)
+- **Search LinkedIn Jobs** with customizable criteria (keywords, location, date)
+- **Smart deduplication** - Never apply to the same job twice
+- **Bulk scraping** - Extract full job descriptions automatically
+- **Seamless integration** - Works with existing bulk analysis workflow
+- **Time savings:** 2-3 hours/week on manual job searching
+
+**Quick example:**
+```bash
+python scripts/job_discovery.py --keywords "Director Product" --location "London"
+# Discovers 20-30 jobs, saves to staging/, ready for bulk analysis
+```
+
+See [QUICKSTART-JOB-DISCOVERY.md](QUICKSTART-JOB-DISCOVERY.md) for details.
+
 ### CV Tailoring with Anti-Hallucination Safeguards
 - Creates tailoring plan for human review before generation
 - **Never fabricates** - only uses content from master CV
@@ -131,7 +154,44 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to adapt for other fields.
 
 ### End-to-End Example: Applying to a Product Lead Role
 
-This is a real example workflow from analyzing a job to submitting an application:
+This is a real example workflow from discovering jobs to submitting applications:
+
+#### 0. Discover Jobs (OPTIONAL - 5 minutes for 20-30 jobs)
+
+**NEW:** Automate job discovery instead of manual searching:
+
+```bash
+python scripts/job_discovery.py --keywords "Director Product Data Platform" --location "London, United Kingdom" --date past_week
+```
+
+**What happens:**
+- Searches LinkedIn Jobs with your criteria
+- Scrolls to load all results (handles pagination)
+- Checks against existing applications (deduplicates)
+- Scrapes full job descriptions for new jobs
+- Saves to `staging/YYYY-MM-DD-discovery-batch/`
+
+**Output:**
+```
+staging/2025-11-05-discovery-batch/
+├── DISCOVERY-SUMMARY.json          # Metadata
+├── Spotify-DirectorProductGrowth/
+│   └── job-description.md
+├── Monzo-HeadOfDataPlatform/
+│   └── job-description.md
+└── ... (18 more jobs)
+```
+
+**Next:** Run bulk analysis on discovered jobs:
+```bash
+python scripts/bulk_analyze.py staging/2025-11-05-discovery-batch
+# Reviews BULK-ANALYSIS-SUMMARY.md sorted by fit score
+# Apply to 8+ fit roles
+```
+
+**Time saved:** 2-3 hours vs. manual searching
+
+---
 
 #### 1. Analyze Job Posting (5-10 minutes)
 

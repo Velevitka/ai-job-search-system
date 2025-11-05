@@ -1,4 +1,76 @@
-# Document Validation Scripts
+# Automation Scripts
+
+Automated scripts for job discovery, document validation, and workflow optimization.
+
+## Job Discovery & Scraping
+
+### `job_discovery.py` - LinkedIn Job Search Automation
+
+**NEW:** Automates job discovery by searching LinkedIn Jobs and scraping full descriptions.
+
+**Requirements:**
+- Python 3.x
+- Playwright: `pip install playwright && python -m playwright install chromium`
+
+**Usage:**
+
+```bash
+# Interactive mode (uses defaults)
+python scripts/job_discovery.py
+
+# Specific search
+python scripts/job_discovery.py --keywords "Director Product Data Platform" --location "London, United Kingdom"
+
+# With date filter
+python scripts/job_discovery.py --keywords "VP Product" --location "Remote, UK" --date past_week
+
+# Headless mode (no browser window)
+python scripts/job_discovery.py --headless
+
+# Future: Auto mode (uses career-preferences.md)
+python scripts/job_discovery.py --auto
+```
+
+**Features:**
+- ✅ Searches LinkedIn Jobs with customizable filters
+- ✅ Handles infinite scroll/pagination
+- ✅ Deduplicates against existing `applications/*` folders
+- ✅ Scrapes full job descriptions
+- ✅ Saves to `staging/YYYY-MM-DD-discovery-batch/`
+- ✅ Generates JSON summary report
+
+**Output:**
+```
+staging/2025-11-05-discovery-batch/
+├── DISCOVERY-SUMMARY.json          # Metadata and job list
+├── CompanyName-RoleTitle/
+│   └── job-description.md
+└── ...
+```
+
+**Next Steps After Discovery:**
+```bash
+# 1. Bulk analyze discovered jobs
+python scripts/bulk_analyze.py staging/2025-11-05-discovery-batch
+
+# 2. Review summary
+cat staging/2025-11-05-discovery-batch/BULK-ANALYSIS-SUMMARY.md
+
+# 3. Apply to 8+ fit scores
+/generate-cv CompanyName
+/generate-cover-letter CompanyName
+```
+
+**Time Saved:** 2-3 hours/week on manual job searching
+
+**Roadmap:**
+- Phase 1 ✅: LinkedIn search scraper
+- Phase 2 (Week 2): Scheduled monitoring with email alerts
+- Phase 3 (Week 3): Multi-platform support (Greenhouse, Lever, Indeed)
+
+---
+
+## Document Validation Scripts
 
 Automated scripts to validate CV and Cover Letter PDF formatting and ensure compliance with professional standards.
 

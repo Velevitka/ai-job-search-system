@@ -1,0 +1,14 @@
+# AI Job Search System - Python Dependencies
+
+# Web scraping and browser automation
+playwright==1.40.0
+
+# Optional: Email notifications (for Phase 2)
+# smtplib is built-in to Python
+# For Gmail API integration:
+# google-auth==2.25.0
+# google-auth-oauthlib==1.2.0
+# google-api-python-client==2.110.0
+
+# Note: After installing playwright, run:
+# python -m playwright install chromium
