@@ -17,7 +17,8 @@
       "Bash(pdfinfo:*)",
       "Bash(python:*)",
       "WebFetch(domain:app.careerpuck.com)",
-      "WebFetch(domain:jobs.lever.co)"
+      "WebFetch(domain:jobs.lever.co)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

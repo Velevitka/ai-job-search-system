@@ -155,23 +155,57 @@ class LinkedInJobSearcher:
         """
         try:
             # Navigate to LinkedIn feed (requires login)
-            self.page.goto('https://www.linkedin.com/feed/', wait_until='networkidle', timeout=10000)
-            time.sleep(2)
+            self.page.goto('https://www.linkedin.com/feed/', wait_until='domcontentloaded', timeout=30000)
 
-            # Check if we're on the login page or feed
+            # Wait a bit for potential redirects
+            time.sleep(3)
+
+            # Check current URL after redirects
             current_url = self.page.url
 
-            if '/login' in current_url or '/checkpoint' in current_url:
+            # If on login page or checkpoint, not logged in
+            if '/login' in current_url:
+                return False
+
+            # If on checkpoint/challenge page, user needs to complete it
+            if '/checkpoint' in current_url:
+                print("  ⚠️ LinkedIn security challenge detected")
+                print("  ℹ️  Please complete the verification in the browser window")
                 return False
 
             # Check for feed elements (indicates logged in)
-            try:
-                self.page.wait_for_selector('.feed-shared-update-v2', timeout=5000)
+            # Use multiple selectors as LinkedIn changes them
+            feed_selectors = [
+                '.feed-shared-update-v2',
+                '[data-test-id="feed-content"]',
+                '.scaffold-layout__main',
+                'main[aria-label="Main Content"]'
+            ]
+
+            for selector in feed_selectors:
+                try:
+                    self.page.wait_for_selector(selector, timeout=5000)
+                    return True
+                except:
+                    continue
+
+            # If we're on the feed URL but can't find feed elements,
+            # we're probably logged in but page structure changed
+            if '/feed' in current_url:
                 return True
-            except:
-                return False
+
+            return False
 
         except Exception as e:
+            # Check if we're on the feed despite the error
+            try:
+                current_url = self.page.url
+                if '/feed' in current_url and '/login' not in current_url:
+                    print(f"  ℹ️  Assuming logged in (on feed page despite timeout)")
+                    return True
+            except:
+                pass
+
             print(f"  ⚠️ Could not check login status: {e}")
             return False
 
@@ -191,36 +225,78 @@ class LinkedInJobSearcher:
             print("  ✅ Already logged in to LinkedIn")
             return
 
-        print("\n  ⚠️ Not logged in to LinkedIn")
+        # Check if we're on a checkpoint/challenge page
+        current_url = self.page.url
+        is_checkpoint = '/checkpoint' in current_url
+
+        if is_checkpoint:
+            print("\n  ⚠️ LinkedIn security checkpoint detected")
+        else:
+            print("\n  ⚠️ Not logged in to LinkedIn")
+
         print("\n" + "="*80)
-        print("MANUAL LOGIN REQUIRED")
+        if is_checkpoint:
+            print("SECURITY VERIFICATION REQUIRED")
+        else:
+            print("MANUAL LOGIN REQUIRED")
         print("="*80)
-        print("\nThe browser window is now showing LinkedIn's login page.")
-        print("\nPlease:")
-        print("  1. Log in to your LinkedIn account in the browser window")
-        print("  2. Complete any 2FA/security checks if prompted")
-        print("  3. Wait until you see your LinkedIn feed")
-        print("  4. Then come back here and press ENTER to continue")
+
+        if is_checkpoint:
+            print("\nLinkedIn requires additional verification (security checkpoint).")
+            print("\nPlease:")
+            print("  1. Complete the security verification in the browser window")
+            print("  2. This may include:")
+            print("     - Email/SMS verification code")
+            print("     - CAPTCHA challenge")
+            print("     - Account verification")
+            print("  3. Wait until you see your LinkedIn feed")
+            print("  4. Then come back here and press ENTER to continue")
+        else:
+            print("\nThe browser window is now showing LinkedIn's login page.")
+            print("\nPlease:")
+            print("  1. Log in to your LinkedIn account in the browser window")
+            print("  2. Complete any 2FA/security checks if prompted")
+            print("  3. Wait until you see your LinkedIn feed")
+            print("  4. Then come back here and press ENTER to continue")
+
         print("\nThe script will pause and wait for you...")
         print("="*80 + "\n")
 
-        # Navigate to login page
-        self.page.goto('https://www.linkedin.com/login')
+        # Navigate to login page if not already on checkpoint
+        if not is_checkpoint:
+            try:
+                self.page.goto('https://www.linkedin.com/login', timeout=30000)
+            except:
+                pass  # Might already be navigating
 
         # Wait for user to log in manually
-        input("Press ENTER after you've logged in to LinkedIn... ")
+        input("Press ENTER after you've completed login/verification... ")
 
         # Verify login successful
         print("\n  🔍 Verifying login...")
-        if self.check_login_status():
-            print("  ✅ Login successful! Session will be saved for future runs.")
 
-            if self.user_data_dir:
-                print(f"  💾 Session saved to: {self.user_data_dir}")
-                print("  ℹ️  Next time you run this script, you won't need to log in again!")
-        else:
-            print("  ❌ Login verification failed. Please try again.")
-            raise Exception("LinkedIn login failed")
+        # Give it a few attempts in case of slow load
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            if self.check_login_status():
+                print("  ✅ Login successful! Session will be saved for future runs.")
+
+                if self.user_data_dir:
+                    print(f"  💾 Session saved to: {self.user_data_dir}")
+                    print("  ℹ️  Next time you run this script, you won't need to log in again!")
+                return
+
+            if attempt < max_attempts - 1:
+                print(f"  ⏳ Waiting a bit longer... (attempt {attempt + 1}/{max_attempts})")
+                time.sleep(5)
+
+        print("  ❌ Login verification failed.")
+        print("\n💡 Troubleshooting:")
+        print("  - Make sure you see your LinkedIn feed (not login page)")
+        print("  - Try waiting a bit longer for the page to fully load")
+        print("  - Check your internet connection")
+        print("  - LinkedIn may be blocking automated access - try again later")
+        raise Exception("LinkedIn login failed")
 
     def scroll_to_load_all_jobs(self, max_scrolls: int = 10):
         """
@@ -345,10 +421,28 @@ class LinkedInJobSearcher:
         try:
             # Navigate to search URL
             print(f"  🌐 Loading: {url}")
-            self.page.goto(url, timeout=30000, wait_until='networkidle')
+
+            # Use domcontentloaded instead of networkidle (more reliable)
+            try:
+                self.page.goto(url, timeout=60000, wait_until='domcontentloaded')
+            except Exception as nav_error:
+                # If navigation times out, check if we're on the page anyway
+                print(f"  ⚠️ Navigation timeout, checking if page loaded...")
+                current_url = self.page.url
+                if 'linkedin.com/jobs' in current_url:
+                    print(f"  ℹ️  On jobs page despite timeout, continuing...")
+                else:
+                    raise nav_error
 
             # Wait for job cards to load
-            time.sleep(2)
+            print(f"  ⏳ Waiting for job listings to appear...")
+            time.sleep(3)
+
+            # Check if we got redirected to a checkpoint
+            if '/checkpoint' in self.page.url:
+                print(f"  ⚠️ LinkedIn security checkpoint appeared during search")
+                print(f"  ℹ️  Please complete the verification and run the script again")
+                return []
 
             # Scroll to load more results
             self.scroll_to_load_all_jobs()
@@ -356,11 +450,23 @@ class LinkedInJobSearcher:
             # Extract job cards
             jobs = self.extract_job_cards()
 
-            print(f"  ✅ Found {len(jobs)} jobs")
+            if len(jobs) == 0:
+                print(f"  ⚠️ No job cards found. Possible reasons:")
+                print(f"     - No jobs match your criteria")
+                print(f"     - LinkedIn changed page structure")
+                print(f"     - Page didn't load properly")
+                print(f"     - You may need to adjust search criteria")
+            else:
+                print(f"  ✅ Found {len(jobs)} jobs")
+
             return jobs
 
         except Exception as e:
             print(f"  ❌ Search failed: {e}")
+            print(f"\n💡 Troubleshooting:")
+            print(f"  - Check your internet connection")
+            print(f"  - LinkedIn may be rate-limiting (try again in a few minutes)")
+            print(f"  - Try running with --visible flag to see what's happening")
             return []
 
     def scrape_job_description(self, url: str) -> Optional[str]:

@@ -468,114 +468,90 @@ Log each variable in `cover-letter-log.md` and `cv-tailoring-notes.md`, then cor
 
 ---
 
-### Priority 7: Automated Job Discovery & Scraping (NEXT FEATURE - Nov 2025)
+### Priority 7: Browser Bookmarklet for Job Saving (IMPLEMENTED - Nov 2025)
 
-**Status:** Planned for implementation
-**Priority:** HIGH - Saves 2-3 hours/week on manual job searching
+**Status:** ✅ Implemented (ToS-Compliant Alternative to Automated Scraping)
+**Priority:** HIGH - Saves time while staying compliant
 
 **Problem Statement:**
-Currently spending significant time manually searching job boards (LinkedIn, Greenhouse, Lever, Indeed) and copy/pasting job descriptions. This is the most time-consuming part of the workflow.
+Manual copy/pasting of job descriptions is time-consuming. Initially built automated scraping, but discovered it violates LinkedIn ToS Section 8.2.
 
-**Proposed Solution: Hybrid Approach**
+**Solution: Hybrid Bookmarklet + Automation Approach**
 
-#### Phase 1: LinkedIn Search Scraper (Week 1)
-**Command:** `/discover-jobs` or automated script
+#### ✅ What We Built (ToS-Compliant)
 
-**Features:**
-- Use Playwright to search LinkedIn Jobs with criteria from `career-preferences.md`
-- Search parameters: keywords, location, seniority, date posted (past week)
-- Scrape search results (job cards: title, company, location, URL)
-- Handle infinite scroll/pagination to load all results
-- Deduplicate against existing `applications/*` folders
-- For each new job, scrape full description and save to `staging/`
-- Output: JSON summary + individual job-description.md files
+**User Flow:**
+1. **Manual Browsing** - User browses LinkedIn jobs normally (no automation)
+2. **Bookmarklet Click** - While viewing a job, click "Save Job" bookmarklet
+3. **Auto-Extract** - JavaScript extracts job data from current page
+4. **Local Save** - Job saved to `staging/manual-saves/`
+5. **Auto-Process** - Python script deduplicates and organizes
 
-**Implementation:**
-```python
-# scripts/job_discovery.py
-class LinkedInJobSearcher:
-    - build_search_url(keywords, location, date_filter)
-    - search(criteria) -> list[job_urls]
-    - scrape_job_description(url) -> text
-    - deduplicate_against_applications()
-    - save_to_staging()
-```
+**Components:**
 
-**Expected Output:**
-```
-staging/2025-11-05-discovery-batch/
-├── DISCOVERY-SUMMARY.json       # All jobs found with metadata
-├── Company1-Role1/
-│   └── job-description.md
-├── Company2-Role2/
-│   └── job-description.md
-└── ...
-```
+##### 1. JavaScript Bookmarklet (`bookmarklet-save-job.js`)
+- Runs when user clicks it (manual action, not automated)
+- Extracts job details from current LinkedIn page DOM
+- Creates markdown file with job description
+- Downloads to local staging folder
 
-**Integration:**
-- Auto-trigger `/analyze-job` for each discovered job
-- Generate summary report sorted by fit score
-- Email/console notification of 8+ fit jobs
+##### 2. Python Job Processor (`scripts/process_saved_jobs.py`)
+- Watches `staging/manual-saves/` for new jobs
+- Deduplicates against `applications/` folders
+- Organizes into proper folder structure
+- Integrates with bulk analysis workflow
+
+**Benefits:**
+- ✅ **Fully ToS-compliant** - User manually browses and clicks
+- ✅ **Zero risk** - No automation, no scraping, no bot detection
+- ✅ **Saves time** - One-click save vs. multi-step copy/paste
+- ✅ **Same workflow** - Works with existing `/analyze-job` and bulk analysis
+
+**Documentation:**
+- `BOOKMARKLET-GUIDE.md` - Setup and usage guide
+- `deprecated/DEPRECATION-NOTICE.md` - Why automated approach was sunset
 
 ---
 
-#### Phase 2: Scheduled Monitoring (Week 2)
-**Command:** Cron job or scheduled task
+#### ❌ What We Deprecated (LinkedIn ToS Violations)
 
-**Features:**
-- Run daily at 9am
-- Execute LinkedIn searches automatically
-- Email summary of new 8+ fit jobs
-- Slack/Discord notification option
-- Track search effectiveness (which keywords yield best fits)
+**Sunset Nov 5, 2025:**
+- `scripts/job_discovery.py` - Automated LinkedIn scraper (violates ToS Section 8.2)
+- `scripts/scheduled_monitor.py` - Scheduled automation
+- Related documentation moved to `deprecated/` folder
 
-**Implementation:**
-```bash
-# crontab
-0 9 * * * cd /path/to/cv && python scripts/job_discovery.py --auto
-```
+**Why Deprecated:**
+LinkedIn ToS Section 8.2 explicitly prohibits:
+- "Use bots or other automated methods to access the Services"
+- "Develop, support or use software, devices, scripts, robots or any other means to scrape"
 
-**Email Template:**
-```
-🎯 Daily Job Discovery Report - Nov 5, 2025
+**Risks avoided:**
+- Account suspension/permanent ban
+- Legal action (LinkedIn actively sues scrapers)
+- GDPR violations
+- Professional reputation damage
 
-New jobs discovered: 12
-After deduplication: 8 new jobs
-
-Tier 1 (9-10 fit): 2 jobs
-  1. Spotify - Director Product Growth (9.5/10) - Stockholm
-  2. Monzo - Head of Data Platform (9/10) - London
-
-Tier 2 (8-9 fit): 3 jobs
-  [List...]
-
-Full report: staging/2025-11-05-discovery-batch/SUMMARY.md
-```
+**Lesson learned:** Always verify ToS compliance before building automation for third-party platforms.
 
 ---
 
-#### Phase 3: Multi-Platform Support (Week 3)
-**Expand to:** Greenhouse, Lever, Indeed
+#### Future Enhancements (All ToS-Compliant)
 
-**Features:**
-- Greenhouse: Search across multiple company boards
-  - Use companies from bulk analysis (Tier 1-2 companies)
-  - Example: `https://boards.greenhouse.io/stripe`
-- Lever: Similar approach
-- Indeed: Public search API alternative
+**Phase 2: Email Alert Parser**
+- Parse LinkedIn job alert emails
+- Extract job URLs and basic info
+- Auto-save to staging for bulk analysis
+- **ToS-compliant** - uses LinkedIn's official alert system
 
-**Company Board Monitoring:**
-```python
-# Monitor specific companies posting on Greenhouse/Lever
-TARGET_COMPANIES = [
-    'stripe', 'notion', 'figma', 'monzo', 'deliveroo',
-    'spotify', 'wise', 'revolut', 'booking', 'airbnb'
-]
+**Phase 3: Multi-Platform Bookmarklets**
+- Adapt bookmarklet for Greenhouse, Lever, Indeed
+- Same manual-click approach
+- Unified processing pipeline
 
-for company in TARGET_COMPANIES:
-    jobs = scrape_greenhouse(f"https://boards.greenhouse.io/{company}")
-    jobs += scrape_lever(f"https://jobs.lever.co/{company}")
-```
+**Phase 4: Browser Extension (Optional)**
+- Chrome/Firefox extension for easier access
+- Still requires manual click per job
+- Enhanced UI for bulk saving session
 
 ---
 

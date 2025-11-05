@@ -124,8 +124,11 @@ __pycache__/
 venv/
 ENV/
 
-# Browser data (LinkedIn session)
+# Browser data (LinkedIn session) - DEPRECATED
 .browser_data/
+
+# Deprecated code (ToS violations)
+# deprecated/  # Keep in git for historical reference with warnings
 
 # ============================================
 # CREDENTIALS AND SECRETS

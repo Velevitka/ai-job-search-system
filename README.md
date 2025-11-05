@@ -6,7 +6,7 @@ An intelligent job application system powered by Claude Code CLI that automates 
 
 This system uses Claude Code (Anthropic's CLI tool) to automate your entire job application workflow:
 
-1. **🔍 Discover Jobs Automatically** - NEW: Search LinkedIn Jobs, scrape descriptions, deduplicate (saves 2-3 hrs/week)
+1. **🔖 Save Jobs with One Click** - Browser bookmarklet for quick job saving (ToS-compliant, saves time)
 2. **Analyze Job Descriptions** - Extract keywords, calculate fit scores, identify gaps
 3. **Tailor CVs Automatically** - Generate role-specific CVs from your master CV with Pandoc + Eisvogel template
 4. **Generate Cover Letters** - Create personalized cover letters based on job analysis
@@ -21,7 +21,7 @@ This system uses Claude Code (Anthropic's CLI tool) to automate your entire job 
 - **Claude Code CLI** installed ([Installation Guide](https://docs.claude.com/claude-code))
 - **Pandoc** with XeLaTeX ([Pandoc Installation](https://pandoc.org/installing.html))
 - **Eisvogel template** for professional PDFs ([Template](https://github.com/Wandmalfarbe/pandoc-latex-template))
-- **Python 3.x** + **Playwright** (for job discovery automation)
+- **Python 3.x** (for job processing scripts)
 - A master CV (your comprehensive CV with all achievements)
 - Basic command line knowledge
 
@@ -33,18 +33,14 @@ git clone https://github.com/yourusername/ai-job-search-system.git
 cd ai-job-search-system
 ```
 
-2. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-python -m playwright install chromium
-```
-
-3. Create the required folder structure:
+2. Create the required folder structure:
 ```bash
 mkdir -p master applications insights staging archive
 ```
 
-4. Add your master CV to `master/YourName_MasterCV.docx`
+3. Add your master CV to `master/YourName_MasterCV.docx`
+
+4. Install the job saving bookmarklet (see [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md))
 
 5. Review and customize the commands in `.claude/commands/` to match your needs
 
@@ -98,20 +94,21 @@ See [USAGE-GUIDE.md](USAGE-GUIDE.md) for detailed usage instructions.
 
 ## 🎨 Key Features
 
-### 🔍 Automated Job Discovery (NEW - Nov 2025)
-- **Search LinkedIn Jobs** with customizable criteria (keywords, location, date)
+### 🔖 One-Click Job Saving (ToS-Compliant)
+- **Browser bookmarklet** - Save jobs with one click while browsing
 - **Smart deduplication** - Never apply to the same job twice
-- **Bulk scraping** - Extract full job descriptions automatically
+- **Auto-processing** - Automatically organize saved jobs
 - **Seamless integration** - Works with existing bulk analysis workflow
-- **Time savings:** 2-3 hours/week on manual job searching
+- **Time savings:** 30-60 seconds per job vs. manual copy/paste
+- **Fully compliant** - No automation, no scraping, no ToS violations
 
-**Quick example:**
-```bash
-python scripts/job_discovery.py --keywords "Director Product" --location "London"
-# Discovers 20-30 jobs, saves to staging/, ready for bulk analysis
-```
+**How it works:**
+1. Browse LinkedIn jobs normally
+2. Click "Save Job" bookmarklet while viewing a job
+3. Job automatically saved to `staging/manual-saves/`
+4. Run bulk analysis on saved jobs
 
-See [QUICKSTART-JOB-DISCOVERY.md](QUICKSTART-JOB-DISCOVERY.md) for details.
+See [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md) for setup and usage.
 
 ### CV Tailoring with Anti-Hallucination Safeguards
 - Creates tailoring plan for human review before generation
@@ -154,27 +151,27 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to adapt for other fields.
 
 ### End-to-End Example: Applying to a Product Lead Role
 
-This is a real example workflow from discovering jobs to submitting applications:
+This is a real example workflow from saving jobs to submitting applications:
 
-#### 0. Discover Jobs (OPTIONAL - 5 minutes for 20-30 jobs)
+#### 0. Save Jobs (OPTIONAL - 1-2 minutes for 10-20 jobs)
 
-**NEW:** Automate job discovery instead of manual searching:
+Use the browser bookmarklet to quickly save jobs while browsing:
 
+**While on LinkedIn Jobs:**
+1. Browse to a job posting
+2. Click "Save to Staging" bookmarklet in your bookmarks bar
+3. Job automatically saved to `staging/manual-saves/`
+
+**Process saved jobs:**
 ```bash
-python scripts/job_discovery.py --keywords "Director Product Data Platform" --location "London, United Kingdom" --date past_week
+python scripts/process_saved_jobs.py
+# Organizes jobs, checks for duplicates
+# Ready for bulk analysis
 ```
-
-**What happens:**
-- Searches LinkedIn Jobs with your criteria
-- Scrolls to load all results (handles pagination)
-- Checks against existing applications (deduplicates)
-- Scrapes full job descriptions for new jobs
-- Saves to `staging/YYYY-MM-DD-discovery-batch/`
 
 **Output:**
 ```
-staging/2025-11-05-discovery-batch/
-├── DISCOVERY-SUMMARY.json          # Metadata
+staging/2025-11-05-saved-jobs/
 ├── Spotify-DirectorProductGrowth/
 │   └── job-description.md
 ├── Monzo-HeadOfDataPlatform/
@@ -182,14 +179,16 @@ staging/2025-11-05-discovery-batch/
 └── ... (18 more jobs)
 ```
 
-**Next:** Run bulk analysis on discovered jobs:
+**Next:** Run bulk analysis on saved jobs:
 ```bash
-python scripts/bulk_analyze.py staging/2025-11-05-discovery-batch
+python scripts/bulk_analyze.py staging/2025-11-05-saved-jobs
 # Reviews BULK-ANALYSIS-SUMMARY.md sorted by fit score
 # Apply to 8+ fit roles
 ```
 
-**Time saved:** 2-3 hours vs. manual searching
+**Time saved:** 1-2 minutes vs. manual copy/paste
+
+See [BOOKMARKLET-GUIDE.md](BOOKMARKLET-GUIDE.md) for bookmarklet setup.
 
 ---
 

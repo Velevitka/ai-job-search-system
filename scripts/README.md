@@ -2,71 +2,68 @@
 
 Automated scripts for job discovery, document validation, and workflow optimization.
 
-## Job Discovery & Scraping
+## Job Saving & Processing
 
-### `job_discovery.py` - LinkedIn Job Search Automation
+### `process_saved_jobs.py` - Job Processing Automation
 
-**NEW:** Automates job discovery by searching LinkedIn Jobs and scraping full descriptions.
+**ToS-Compliant** job organization and deduplication for manually saved jobs.
 
 **Requirements:**
-- Python 3.x
-- Playwright: `pip install playwright && python -m playwright install chromium`
+- Python 3.x (no external dependencies)
 
 **Usage:**
 
 ```bash
-# Interactive mode (uses defaults)
-python scripts/job_discovery.py
+# Process all jobs in staging/manual-saves/
+python scripts/process_saved_jobs.py
 
-# Specific search
-python scripts/job_discovery.py --keywords "Director Product Data Platform" --location "London, United Kingdom"
+# Process specific batch
+python scripts/process_saved_jobs.py --batch staging/my-batch
 
-# With date filter
-python scripts/job_discovery.py --keywords "VP Product" --location "Remote, UK" --date past_week
-
-# Headless mode (no browser window)
-python scripts/job_discovery.py --headless
-
-# Future: Auto mode (uses career-preferences.md)
-python scripts/job_discovery.py --auto
+# Dry run (show what would happen)
+python scripts/process_saved_jobs.py --dry-run
 ```
 
 **Features:**
-- ✅ Searches LinkedIn Jobs with customizable filters
-- ✅ Handles infinite scroll/pagination
 - ✅ Deduplicates against existing `applications/*` folders
-- ✅ Scrapes full job descriptions
-- ✅ Saves to `staging/YYYY-MM-DD-discovery-batch/`
-- ✅ Generates JSON summary report
+- ✅ Organizes jobs into proper folder structure
+- ✅ Validates job description format
+- ✅ Generates batch summary report
+- ✅ Integrates with bulk analysis workflow
+
+**How It Works:**
+1. User saves jobs using browser bookmarklet (see `BOOKMARKLET-GUIDE.md`)
+2. Jobs land in `staging/manual-saves/`
+3. Run `process_saved_jobs.py` to organize and deduplicate
+4. Run bulk analysis on processed batch
 
 **Output:**
 ```
-staging/2025-11-05-discovery-batch/
-├── DISCOVERY-SUMMARY.json          # Metadata and job list
+staging/2025-11-05-processed-batch/
+├── PROCESSING-SUMMARY.json         # Metadata
 ├── CompanyName-RoleTitle/
 │   └── job-description.md
 └── ...
 ```
 
-**Next Steps After Discovery:**
+**Next Steps After Processing:**
 ```bash
-# 1. Bulk analyze discovered jobs
-python scripts/bulk_analyze.py staging/2025-11-05-discovery-batch
+# 1. Bulk analyze processed jobs
+python scripts/bulk_analyze.py staging/2025-11-05-processed-batch
 
 # 2. Review summary
-cat staging/2025-11-05-discovery-batch/BULK-ANALYSIS-SUMMARY.md
+cat staging/2025-11-05-processed-batch/BULK-ANALYSIS-SUMMARY.md
 
 # 3. Apply to 8+ fit scores
 /generate-cv CompanyName
 /generate-cover-letter CompanyName
 ```
 
-**Time Saved:** 2-3 hours/week on manual job searching
+**Time Saved:** Eliminates manual deduplication and organization
 
-**Roadmap:**
-- Phase 1 ✅: LinkedIn search scraper
-- Phase 2 (Week 2): Scheduled monitoring with email alerts
-- Phase 3 (Week 3): Multi-platform support (Greenhouse, Lever, Indeed)
+**See Also:**
+- `BOOKMARKLET-GUIDE.md` - How to save jobs with one click
+- `deprecated/DEPRECATION-NOTICE.md` - Why automated scraping was sunset
 
 ---
 
