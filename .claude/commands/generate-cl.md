@@ -1010,6 +1010,54 @@ sed -n '/^Dear/,/^Warm regards/p' ArturSwadzba_CoverLetter_Company.md | wc -w
 
 ---
 
+### Step 5F: Update STATUS.md (Automated Status Tracking)
+
+After successful PDF generation and validation, **automatically update the root-level STATUS.md**:
+
+**Read the current STATUS.md file:**
+```bash
+# Check if STATUS.md exists at root level
+cat STATUS.md
+```
+
+**Update the file to reflect cover letter completion:**
+
+1. **Add to "Recently Completed" section:**
+   - Add entry: `- ✅ [Today's date]: [Company] cover letter generated and validated (1 page, XXX words)`
+
+2. **Update "Next Recommended Actions":**
+   - If this company was in the "Next Actions" list, mark it with "Cover letter ready ✅"
+   - Update status to "Ready to submit" if both CV and CL are complete
+
+3. **Keep STATUS.md current:**
+   - Ensure "Last Updated" date is today
+   - Keep information accurate and consistent
+
+**Example update:**
+```markdown
+## Recently Completed (Last 7 Days)
+
+- ✅ **Nov 2:** Redcare Pharmacy cover letter generated and validated (1 page, 387 words)
+- ✅ **Nov 2:** Redcare Pharmacy CV generated and validated (2 pages, 74KB)
+- ✅ **Oct 31:** Angi application submitted (9/10 fit)
+...
+```
+
+**Notify user:**
+```
+📊 STATUS.md updated automatically:
+   - Added cover letter completion to recent activity
+   - Updated: 2025-11-02
+
+✅ Application package complete for [Company]:
+   - CV: ArturSwadzba_CV_[Company].pdf ✓
+   - Cover Letter: ArturSwadzba_CoverLetter_[Company].pdf ✓
+
+Next step: Review both PDFs, then submit application with `/update-status [CompanyName] applied`
+```
+
+---
+
 ## Output Files Summary
 
 After completion, you will have:

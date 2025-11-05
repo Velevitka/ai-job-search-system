@@ -283,7 +283,50 @@ Ready to proceed?
 - To submit now: Run `/update-status [CompanyName] applied "notes"`
 ```
 
-### Step 6: Suggest Master CV Update (If Applicable)
+### Step 6: Update STATUS.md (Automated Status Tracking)
+
+After successful PDF generation and validation, **automatically update the root-level STATUS.md**:
+
+**Read the current STATUS.md file:**
+```bash
+# Check if STATUS.md exists at root level
+cat STATUS.md
+```
+
+**Update the file to reflect CV completion:**
+
+1. **Add to "Recently Completed" section:**
+   - Add entry: `- ✅ [Today's date]: [Company] CV generated and validated`
+
+2. **Update "Next Recommended Actions":**
+   - If this company was in the "Next Actions" list, mark it with "CV ready ✅"
+   - Or move it to a "Ready to Apply" subsection
+
+3. **Keep STATUS.md current:**
+   - Ensure "Last Updated" date is today
+   - Keep information accurate and consistent
+
+**Example update:**
+```markdown
+## Recently Completed (Last 7 Days)
+
+- ✅ **Nov 2:** Redcare Pharmacy CV generated and validated (2 pages, 74KB)
+- ✅ **Oct 31:** Angi application submitted (9/10 fit)
+...
+```
+
+**Notify user:**
+```
+📊 STATUS.md updated automatically:
+   - Added CV completion to recent activity
+   - Updated: 2025-11-02
+
+Next step: Generate cover letter with `/generate-cover-letter [CompanyName]`
+```
+
+---
+
+### Step 7: Suggest Master CV Update (If Applicable)
 
 If any bullet point modifications are particularly strong, suggest:
 ```

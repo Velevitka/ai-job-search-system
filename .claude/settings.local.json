@@ -5,7 +5,19 @@
       "Bash(mkdir:*)",
       "WebFetch(domain:careers.virginatlantic.com)",
       "Bash(pandoc:*)",
-      "WebFetch(domain:www.sumup.com)"
+      "WebFetch(domain:www.sumup.com)",
+      "SlashCommand(/analyze-job:*)",
+      "WebSearch",
+      "WebFetch(domain:careers.instapro.group)",
+      "WebFetch(domain:job-boards.greenhouse.io)",
+      "WebFetch(domain:www.redcare-pharmacy.com)",
+      "WebFetch(domain:www.yelp.careers)",
+      "WebFetch(domain:apply.workable.com)",
+      "Bash(python scripts/validate-cv.py:*)",
+      "Bash(pdfinfo:*)",
+      "Bash(python:*)",
+      "WebFetch(domain:app.careerpuck.com)",
+      "WebFetch(domain:jobs.lever.co)"
     ],
     "deny": [],
     "ask": []
