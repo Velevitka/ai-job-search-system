@@ -754,6 +754,7 @@ Experience with CDP a plus."
 - [ ] Bulk processing: Some fit scores estimated vs. calculated (need deep-dive phase)
 - [ ] Cover letter logging: Not auto-generated yet (manual creation)
 - [ ] Metrics dashboard: Still placeholder data (need real application outcomes)
+- [ ] Fit score calculation tests: Add pytest tests to ensure scoring consistency and prevent regression when refining algorithm (2 hours, low priority)
 
 ### Low Priority / Nice-to-Haves
 - [ ] Automated follow-up email drafting
