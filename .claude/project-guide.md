@@ -347,47 +347,55 @@ python scripts/validation/validate-cover-letter.py applications/2025-11-Company-
 
 ## Testing Framework
 
-### Current State (Manual Validation)
+### Current State
 
-**What we have:**
+**✅ Implemented:**
+- Pytest framework installed and configured
+- Test directory structure (`tests/`, `tests/fixtures/`)
+- Validation script tests (`test_validation.py`)
+- Pytest fixtures for module imports
+- Configuration (`pytest.ini`, `tests/README.md`)
+- Requirements updated with pytest dependencies
+
+**What works:**
 - Validation scripts: `scripts/validation/validate-cv.py`, `validate-cover-letter.py`
-- Manual testing of slash commands
+- Automated tests for file size, page count, paper size validation
+- Test coverage tracking with pytest-cov
+- Fixtures handle import of scripts with hyphens in filenames
+
+**Still manual:**
+- Slash command testing
 - Visual inspection of PDFs
 - Real-world usage testing (applying to jobs)
 
-**What works well:**
-- Validation catches formatting issues
-- Manual testing finds edge cases
-- Real applications validate entire workflow
-
-**Gaps:**
-- No unit tests for Python scripts
-- No regression testing
-- No automated command testing
-- No fit score accuracy measurement
+**Gaps to address:**
+- Fit score calculation tests
+- File operations tests
+- Bookmarklet extraction tests
+- Integration tests for full workflows
 
 ### Planned Testing Framework (pytest)
 
-**Phase 1: Setup (Next Session)**
+**Phase 1: Setup** ✅ COMPLETE
 
 ```bash
-# Install pytest
+# Installed
 pip install pytest pytest-cov
 
-# Add to requirements.txt
-pytest==7.4.0
-pytest-cov==4.1.0
+# Added to requirements.txt
+pytest==8.4.2
+pytest-cov==7.0.0
 
-# Create test structure
+# Created test structure
 tests/
-├── __init__.py
-├── test_validation.py        # Test validation scripts
-├── test_bookmarklet.py        # Test JS extraction logic
-├── test_fit_scoring.py        # Test fit score calculations
-└── fixtures/
-    ├── sample_cv.pdf
-    ├── sample_job_description.md
-    └── sample_analysis.md
+├── __init__.py               ✅ Created
+├── conftest.py               ✅ Created (fixtures)
+├── test_validation.py        ✅ Created (18 tests)
+├── README.md                 ✅ Created (documentation)
+└── fixtures/                 ✅ Created (empty, ready for test data)
+
+# Additional files
+pytest.ini                     ✅ Created (configuration)
 ```
 
 **Phase 2: Write Tests**
@@ -416,17 +424,22 @@ def test_cv_file_size_range():
     assert 60000 <= result['file_size'] <= 80000
 ```
 
-**Phase 3: Run Tests**
+**Phase 3: Run Tests** ✅ IMPLEMENTED
 
 ```bash
 # Run all tests
-pytest tests/ -v
+pytest
 
 # Run with coverage
-pytest tests/ --cov=scripts --cov-report=html
+pytest --cov=scripts --cov-report=html
 
 # Run specific test file
-pytest tests/test_validation.py -v
+pytest tests/test_validation.py
+
+# Run specific test
+pytest tests/test_validation.py::TestFileSizeCheck::test_optimal_size_range
+
+# See tests/README.md for full documentation
 ```
 
 ### Test Coverage Goals

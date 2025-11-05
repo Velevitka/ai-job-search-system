@@ -1,14 +1,15 @@
 # AI Job Search System - Python Dependencies
 
-# Web scraping and browser automation
-playwright==1.40.0
+# Testing framework
+pytest==8.4.2
+pytest-cov==7.0.0
 
-# Optional: Email notifications (for Phase 2)
-# smtplib is built-in to Python
-# For Gmail API integration:
-# google-auth==2.25.0
-# google-auth-oauthlib==1.2.0
-# google-api-python-client==2.110.0
+# DEPRECATED: Web scraping (see deprecated/automation/)
+# Only needed if using deprecated automated scraping scripts
+# playwright==1.40.0
 
-# Note: After installing playwright, run:
-# python -m playwright install chromium
+# Note: Core application uses Python standard library only
+# System dependencies (install separately):
+# - Pandoc 2.x+
+# - XeLaTeX (TeX Live or MiKTeX)
+# - pdfinfo (poppler-utils)
