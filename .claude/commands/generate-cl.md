@@ -962,15 +962,47 @@ python scripts/validate-cover-letter.py "applications/YYYY-MM-Company-Role/Artur
 
 🚨 **STOP! Cover letter is too long!**
 
+**⚠️ CRITICAL: FOLLOW FORMATTING HIERARCHY - DO NOT CONDENSE CONTENT FIRST!**
+
+**MANDATORY ORDER:**
+1. **FIRST:** Adjust margins (20mm optimal, 18mm acceptable)
+2. **SECOND:** Adjust font size (11pt ideal, 10pt acceptable)
+3. **THIRD:** Remove excessive vertical spacing (`\vspace` commands)
+4. **LAST RESORT:** Condense content (reduce word count)
+
 **Remediation steps:**
+
+**Step 1: Adjust Margins (Try First)**
+```yaml
+---
+geometry: margin=20mm  # Try this first
+---
+```
+If still >1 page, try `margin=18mm`
+
+**Step 2: Adjust Font Size (Try Second)**
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt  # Reduce from default 11pt
+---
+```
+
+**Step 3: Remove Excessive Vertical Spacing (Try Third)**
+- Check markdown for `\vspace` commands
+- Should have max 2 `\vspace` commands total
+- Remove any excessive spacing between paragraphs
+
+**Step 4: Condense Content (Last Resort Only)**
+**Only if steps 1-3 fail**
+
 1. Count words in markdown file (should be 300-400, NOT 450-500)
-2. If > 400 words: **Condense the content**
+2. If > 400 words: **Condense strategically**
    - Shorten opening paragraph (2-3 sentences max)
    - Combine or shorten middle paragraphs
    - Tighten closing (2 sentences)
-3. Remove excessive `\vspace` commands (should be max 2)
-4. Regenerate PDF
-5. Re-run validation
+3. Regenerate PDF
+4. Re-run validation
 
 **Example word count check:**
 ```bash

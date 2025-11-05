@@ -400,14 +400,51 @@ If master CV is 3 pages and needs to fit 2 pages:
 
 ## Troubleshooting Formatting Issues
 
-### Problem: CV is 4+ pages instead of 2 pages
-**Cause:** Wrong YAML front matter or missing Eisvogel template
-**Fix:**
-1. Open the `.md` file and check YAML (first 20 lines)
-2. If you see `documentclass:`, `header-includes:`, or `geometry:` - **DELETE ALL YAML**
-3. Keep only minimal YAML or no YAML at all
-4. Ensure pandoc command has `--template eisvogel`
-5. Regenerate PDF
+### Problem: CV is 3+ pages instead of 2 pages
+
+**⚠️ CRITICAL: FOLLOW FORMATTING HIERARCHY - DO NOT REMOVE CONTENT FIRST!**
+
+**MANDATORY ORDER:**
+1. **FIRST:** Adjust margins (20mm optimal, 18mm acceptable)
+2. **SECOND:** Adjust font size (11pt ideal, 10pt acceptable)
+3. **THIRD:** Adjust line/paragraph spacing
+4. **LAST RESORT:** Remove least relevant content
+
+#### Step 1: Adjust Margins (Try First)
+```yaml
+---
+geometry: margin=20mm  # Try this first
+---
+```
+If still >2 pages, try `margin=18mm`
+
+#### Step 2: Adjust Font Size (Try Second)
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt  # Reduce from default 11pt
+---
+```
+
+#### Step 3: Adjust Line Spacing (Try Third)
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt
+linestretch: 0.95  # Slightly tighter line spacing
+---
+```
+
+#### Step 4: Remove Content (Last Resort Only)
+**Only if steps 1-3 fail**
+
+Remove in this priority order:
+1. Least relevant bullets for specific role
+2. Older experience (10+ years)
+3. Condense consultancy work
+4. Tighten education section
+
+**NEVER remove:** Recent achievements, relevant experience, quantified metrics
 
 ### Problem: File size is too small (<40KB) or too large (>100KB)
 **Cause:** Wrong template used (not Eisvogel)

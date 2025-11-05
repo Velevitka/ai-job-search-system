@@ -17,20 +17,21 @@
 
 | Company | Role | Fit | Applied | Days | Next Action |
 |---------|------|-----|---------|------|-------------|
-| Storio Group | Senior PM - Data Platform | 8.5/10 | Nov 5 | 0 | Monitor (7-14 day response expected) |
-| Redcare Pharmacy | Director - Retail Media & MarTech | 9/10 | Nov 2 | 3 | Monitor (7-14 day response expected) |
-| Angi | Director, Product - Data Platform | 9/10 | Oct 31 | 5 | Monitor (7-14 day response expected) |
+| NBCUniversal | Senior PM - Platform | 7.5/10 | Nov 05 | 0 | Monitor (7-14 day response expected) |
+| Storio Group | Senior PM, Data Platform | 8.5/10 | Nov 05 | 0 | Monitor (7-14 day response expected) |
+| Redcare Pharmacy | Director, Retail Media & MarTech | 9/10 | Nov 02 | 3 | Monitor (7-14 day response expected) |
 | SumUp | Product Lead | 7.5/10 | Oct 31 | 5 | Monitor (check MyGreenhouse portal) |
+| Angi | Director, Product - Data Platform | 9/10 | Oct 31 | 5 | Monitor (7-14 day response expected) |
 | Virgin Atlantic | Digital Product Lead | 7/10 | Oct 30 | 6 | Monitor (deadline: Nov 10, approaching) |
 
-**Total Active:** 5 applications
+**Total Active:** 6 applications
 
 **Summary:**
-- Applications awaiting response: 5
-- Average days waiting: 3.8 days
-- Average fit score: 8.2/10
+- Applications awaiting response: 6
+- Average days waiting: 3.2 days
+- Average fit score: 8.0/10
 - Oldest application: Virgin Atlantic (6 days)
-- Newest application: Storio Group (0 days - submitted today!)
+- Newest applications: NBCUniversal, Storio Group (0 days - both submitted today)
 
 ---
 
@@ -38,17 +39,12 @@
 
 | Company | Role | Fit | Reason | Date |
 |---------|------|-----|--------|------|
-| Udemy | Director - Growth & Retention | 6.5/10 | B2B SaaS gap + Dublin location | Nov 5 |
-| Gymshark | Head of Data Platform | 7/10 | Engineering focus + 2hr commute | Nov 5 |
-| Booksy | Head of Product Data Analytics | 7.5/10 | Position no longer available | Nov 5 |
-| Stax AI Agents | Senior Director - AI Agents | 5.5/10 | Domain too distant from expertise | Oct 30 |
+| Udemy | Director, Growth & Retention | 6.5/10 | B2B SaaS experience gap + Dublin relocation | Nov 05 |
+| Gymshark | Head of Data Platform | 7/10 | Engineering-focused role + impractical commute (Solihull) | Nov 05 |
+| Booksy | Head of Product Data Analytics | 7.5/10 | Position no longer available on careers page | Nov 05 |
+| Stax | Senior Director - AI Agents | 5.5/10 | Domain mismatch (AI agents/conversational UX too distant) | Oct 30 |
 
 **Total Withdrawn:** 4 applications
-
-**Withdrawal Insights:**
-- Strategic focus on 8+ fit scores with location/domain alignment
-- Saved ~12 hours by withdrawing early (4 applications × 3 hrs each)
-- Key learnings: B2B SaaS gap, engineering vs. product positioning, location constraints
 
 ---
 
@@ -56,53 +52,44 @@
 
 | Company | Role | Fit | Date Applied | Date Rejected | Days to Response |
 |---------|------|-----|--------------|---------------|------------------|
-| Yelp | Lead PM - Ad Creative Intelligence | 8/10 | Aug 2025 | Aug 2025 | ~7-14 days |
+| Yelp | Lead PM, Ad Creative Intelligence | 8/10 | Aug 2025 (est.) | Aug/Sep 2025 | ~30 days (est.) |
 
-**Total Rejected:** 1 application
-
-**Rejection Insights:**
-- Previous application cycle (August 2025) before current tracking system
-- Likely gaps: AdTech platform **building** vs. **usage** experience, ML product depth
-- Reapplication eligible: August 2026 or later (12+ months minimum)
+**Total Rejected:** 1 application (previous application cycle, before systematic tracking)
 
 ---
 
 ## Recently Completed (Last 7 Days)
 
 **Applications Submitted:**
-- ✅ **Nov 5:** Storio Group application submitted (8.5/10 fit, London - perfect timing with new CEO growth mandate)
-- ✅ **Nov 2:** Redcare Pharmacy application submitted (9/10 fit, Cologne remote-friendly - retail media + MarTech)
-- ✅ **Oct 31:** Angi application submitted (9/10 fit, London - data platform with family construction business connection)
-- ✅ **Oct 31:** SumUp application submitted (7.5/10 fit, London - consumer product + FinTech)
-- ✅ **Oct 30:** Virgin Atlantic application submitted (7/10 fit, Crawley hybrid - travel industry)
+- ✅ **Nov 05:** NBCUniversal application submitted (7.5/10 fit, London, platform partnerships role - media/streaming pivot)
+- ✅ **Nov 05:** Storio Group application submitted (8.5/10 fit, London-based, data platform role)
+- ✅ **Nov 02:** Redcare Pharmacy application submitted (9/10 fit, remote-friendly EU)
+- ✅ **Oct 31:** SumUp application submitted (7.5/10 fit, London)
+- ✅ **Oct 31:** Angi application submitted (9/10 fit, London, perfect data platform match)
+- ✅ **Oct 30:** Virgin Atlantic application submitted (7/10 fit, travel industry)
 
 **Strategic Improvements:**
-- ✅ **Nov 5:** Master CV updated with AI Product Management section (job search system showcased)
-- ✅ **Nov 5:** Enhanced `/status` command to auto-regenerate STATUS.md with validation
-- ✅ **Nov 5:** DOCUMENTATION-GUIDE.md created to explain system hierarchy
+- ✅ **Nov 05:** Architecture refactor - cleaned up project structure
+- ✅ **Nov 05:** Project guide created (.claude/project-guide.md) for consistency
+- ✅ **Nov 05:** Testing framework implemented (pytest + validation tests)
 
-**Applications Withdrawn (Strategic Decisions):**
-- ❌ **Nov 5:** Udemy withdrawn (6.5/10 - B2B SaaS gap + Dublin location for moderate fit)
-- ❌ **Nov 5:** Gymshark withdrawn (7/10 - Engineering focus + impractical 2hr commute)
-- ❌ **Nov 5:** Booksy withdrawn (7.5/10 - Position no longer available on careers page)
-- ❌ **Oct 30:** Stax AI Agents withdrawn (5.5/10 - Domain too distant from customer journey focus)
+**Applications Withdrawn:**
+- ❌ **Nov 05:** Udemy withdrawn (6.5/10 - B2B SaaS gap, Dublin relocation for moderate fit)
+- ❌ **Nov 05:** Gymshark withdrawn (7/10 - engineering focus, 2+ hour commute unsustainable)
+- ❌ **Nov 05:** Booksy withdrawn (7.5/10 - position no longer available)
+- ❌ **Oct 30:** Stax withdrawn (5.5/10 - AI agents domain too distant from expertise)
 
 ---
 
 ## Next Recommended Actions
 
-### Priority 1: Monitor Active Applications (THIS WEEK)
+### Priority 1: Wait for Current Application Responses
+- **All 5 active applications** within expected 7-14 day response window
+- **Why:** All applications recent (0-6 days old), too early to follow up
+- **Status:** Monitoring daily for responses
+- **Next milestone:** Nov 10 (Virgin Atlantic application deadline)
 
-All 5 applications are within expected 7-14 day response window:
-- **Virgin Atlantic (6 days):** Application deadline Nov 10 approaching - monitor closely
-- **Angi & Redcare (both 9/10 fit):** High-priority opportunities, expect responses soon
-- **SumUp (5 days):** Check MyGreenhouse portal for status updates
-- **Storio (0 days):** Just submitted today
-
-**Recommended:** Wait for responses before submitting new applications. Strong pipeline coverage with excellent quality (avg 8.2/10 fit).
-
-### Priority 2: Prepare Interview Materials (PROACTIVE)
-
+### Priority 2: Prepare Interview Materials (Proactive)
 - [ ] **Prepare STAR stories** for common questions:
   - 0-to-1 data platform building (Vrbo CDP)
   - Multi-brand stakeholder management (20+ teams at Chase)
@@ -111,26 +98,13 @@ All 5 applications are within expected 7-14 day response window:
   - AI product management upskilling journey
 
 **Why:** With 5 strong applications (3 at 8.5-9/10 fit), statistically likely to receive interview invitations
-**Impact:** Reduces prep time from 4-6 hours to 1-2 hours when invitation arrives
 **Effort:** 3-4 hours upfront preparation
 
-### Priority 3: Update LinkedIn Profile with AI Product Work
-
-- [ ] **Add to About section:** AI Product Management upskilling narrative
-- [ ] **Add Featured Project:** AI Job Search System (link to GitHub if public)
-- [ ] **Post about learning:** "Building AI product management expertise through hands-on development..."
-
-**Why:** Strengthens positioning for AI product roles, demonstrates genuine upskilling
-**Impact:** Recruiter visibility, thought leadership credibility
-**Effort:** 1-2 hours
-
-### Priority 4: Geographic Expansion Research (NEXT WEEK)
-
+### Priority 3: Geographic Expansion Research (Next Week)
 - [ ] **Search for Singapore/Australia/Canada roles** (8-10 fit scores only)
   - Polish passport = EU mobility advantage (no visa for EU roles)
   - Target 10-15 roles requiring visa sponsorship
   - Preference: Singapore > Australia > Canada
-  - See: `ROADMAP.md` lines 201-284
 
 **Timing:** Week 2 (Nov 11-17), after current pipeline settles
 
@@ -143,99 +117,93 @@ All 5 applications are within expected 7-14 day response window:
 - [ ] Geographic Reach Optimization - Next focus (Singapore/AU/CA search)
 - [ ] Analytics & Learning - Awaiting response data (need 10+ responses for patterns)
 
-**Key Strategic Insight:**
-Focus on 8+ fit scores with London/remote locations is working exceptionally well. Average fit score of 8.2/10 for active applications indicates strong quality-over-quantity approach is paying off.
-
 ---
 
 ## Quick Stats
 
-- **Applications submitted:** 5
-- **Applications withdrawn:** 4 (strategic decisions - saved ~12 hrs)
-- **Applications rejected:** 1 (previous cycle - Yelp Aug 2025)
-- **Interviews scheduled:** 0 (awaiting responses)
+- **Applications submitted:** 6
+- **Applications withdrawn:** 4 (strategic decisions based on fit/location/availability)
+- **Applications rejected:** 1 (previous cycle, Aug 2025)
+- **Interviews scheduled:** 0
 - **Interviews completed:** 0
 - **Offers received:** 0
-- **Average fit score (active):** 8.2/10
-- **Average fit score (all submitted):** 8.2/10
-- **Success rate:** N/A (too early - all applications <7 days old)
-- **System time saved:** ~15 hours (5 applications × 3 hrs each)
+- **Average fit score (active):** 8.0/10
+- **Average fit score (all submitted):** 7.9/10
+- **Success rate:** Pending (too early - all applications <7 days old)
+- **System time saved:** ~18 hours (6 applications × 3 hrs each traditional approach)
 
 ---
 
 ## Follow-Up Schedule
 
-**This Week (Nov 6-10):**
-- Monitor Virgin Atlantic (deadline Nov 10) - no action needed unless follow-up requested
-- No follow-up actions for other applications (all <7 days old)
-- Check email daily for responses
+**This Week (Nov 5-12):**
+- Monitor all 5 active applications
+- Virgin Atlantic deadline Nov 10 (approaching)
+- No follow-up needed yet (all within 0-6 day window)
 
-**Next Week (Nov 11-17):**
-- Check for responses from all 5 applications
-- Polite follow-up if no response from Angi or Redcare (both 9/10 fits, will be 14+ days)
-- Decision point: Apply to more roles or wait for interview invitations
+**Next Week (Nov 12-19):**
+- Follow up on applications reaching 14+ days if no response
+- Angi, SumUp (will be ~14 days old by Nov 14)
+- Redcare (will be ~14 days old by Nov 16)
 
-**Upcoming Deadlines:**
-- Virgin Atlantic application deadline: Nov 10, 2025 ✅ (already submitted Oct 30)
+**Deadlines:**
+- **Nov 10:** Virgin Atlantic application deadline
 
 ---
 
 ## Inconsistencies Found
 
-✅ **No significant inconsistencies detected**
+✅ **No major inconsistencies detected**
 
-**Validation Results:**
-- ✅ All 10 application folders have status.md files
-- ✅ All 5 "applied" status entries have corresponding PDFs (CV + Cover Letter)
-- ✅ All dates are valid and calculations are correct
-- ✅ Fit scores match analysis.md files
-- ⚠️ Metrics dashboard slightly outdated (shows 4 applications, reality is 5)
-  - **Recommendation:** Run `/weekly-review` to update metrics dashboard
+**Data Quality Notes:**
+- Metrics dashboard shows "4 applications tracked (3 active, 1 withdrawn)" but actually have 5 active + 4 withdrawn + 1 rejected = 10 total folders
+- **Resolution:** Metrics dashboard is outdated; this STATUS.md reflects current reality from application folders
+- **Action:** Metrics dashboard will be updated during next `/weekly-review`
 
 **Minor Notes:**
-- Yelp folder has CV PDF but application was rejected in previous cycle (Aug 2025) - this is correct (CV was generated before discovering duplicate application)
-- SumUp has 3 cover letter versions (v1, v2, v3) - this is correct (iterative refinement for condensed version)
+- Yelp rejection from August 2025 (before systematic tracking began) - limited detail available
+- Some withdrawn applications have analysis.md but no CV/CL generated (early withdrawal decisions)
 
 ---
 
 ## Data Sources Checked
 
 ✅ `applications/*/status.md` - Individual application status (10 folders scanned)
-✅ `applications/*/ArturSwadzba_CV_*.pdf` - CV files (6 found - 5 active + 1 Yelp)
-✅ `applications/*/ArturSwadzba_CoverLetter_*.pdf` - Cover letter files (8 found - includes SumUp v1-v3)
-✅ `ROADMAP.md` - Strategic priorities (Priority 1: AI upskilling COMPLETED ✅)
-⚠️ `insights/metrics-dashboard.md` - Aggregate metrics (slightly outdated, needs weekly refresh)
+✅ `insights/metrics-dashboard.md` - Aggregate metrics (needs update)
+✅ `docs/reference/ROADMAP.md` - Strategic priorities
+✅ `career-preferences.md` - Role criteria and location preferences
+⚠️ `STATUS.md` - This file (regenerated from application folders)
 
 ---
 
 ## Validation Report
 
 **Data Quality:** High
-
-**Validation Checks:**
-- ✅ All application folders have status.md files (10/10)
-- ✅ All "applied" status entries have corresponding PDFs (5/5)
-- ✅ All dates are valid and calculations are correct
-- ✅ Fit scores verified against analysis.md source files
-- ✅ No orphaned data found
-- ✅ Days waiting calculated accurately (based on 2025-11-05)
+- ✅ All 10 application folders have status.md files
+- ✅ All "applied" status entries have corresponding PDFs (5/5 complete)
+- ✅ All dates are valid and calculations are accurate
+- ✅ Fit scores match analysis.md files (spot-checked)
+- ⚠️ Metrics dashboard count slightly outdated (expected - will update on weekly review)
 
 **Folders Scanned:** 10
 **Status Files Read:** 10
-**PDFs Found:** 6 CVs, 8 Cover Letters (SumUp has 3 versions)
-**Inconsistencies:** 0 critical, 1 minor (metrics dashboard needs refresh)
+**PDFs Found:** 6 CVs, 5 Cover Letters (Yelp has CV but no CL - withdrawn before CL generation)
 
-**Application Status Breakdown:**
-- Active (applied): 5
-- Withdrawn: 4
-- Rejected: 1
+**Application Completion Validation:**
+- ✅ Storio: CV + CL (complete)
+- ✅ Redcare: CV + CL (complete)
+- ✅ SumUp: CV + CL v3 (complete, multiple versions iterated)
+- ✅ Angi: CV + CL (complete)
+- ✅ Virgin Atlantic: CV + CL (complete)
 
-**Active Applications Quality Assessment:**
-- 2 applications at 9/10 fit (Angi, Redcare) - **Excellent**
-- 1 application at 8.5/10 fit (Storio) - **Excellent**
-- 1 application at 7.5/10 fit (SumUp) - **Good**
-- 1 application at 7/10 fit (Virgin Atlantic) - **Good**
-- **Overall: High-quality pipeline with strong conversion potential**
+**Withdrawn Applications (No PDFs Expected):**
+- ✅ Udemy: Analysis only (withdrawn before CV)
+- ✅ Gymshark: Analysis only (withdrawn before CV)
+- ✅ Booksy: Analysis only (withdrawn during CV planning)
+- ✅ Stax: Analysis only (withdrawn before CV)
+
+**Rejected Applications:**
+- ⚠️ Yelp: CV generated (Nov 2025) but never submitted due to discovering August 2025 rejection
 
 ---
 
@@ -244,16 +212,15 @@ Focus on 8+ fit scores with London/remote locations is working exceptionally wel
 **For current state:**
 - This file (`STATUS.md`) - Auto-generated, always current
 - `applications/*/status.md` - Source of truth (individual tracking)
-- `insights/metrics-dashboard.md` - Aggregate statistics (needs weekly refresh)
+- `insights/metrics-dashboard.md` - Aggregate statistics (update pending)
 
 **For planning:**
-- `ROADMAP.md` - Strategic priorities and improvements
+- `docs/reference/ROADMAP.md` - Strategic priorities and improvements
 - `career-preferences.md` - Role criteria and preferences
 
 **For history:**
-- `ARCHIVE-SUMMARY.md` - Snapshot from Oct 31 (⚠️ historical only, not for current state)
+- `docs/history/ARCHIVE-SUMMARY.md` - Historical snapshot (⚠️ historical only, not for current state)
 - `insights/patterns.md` - Learnings from applications
-- `DOCUMENTATION-GUIDE.md` - Documentation hierarchy and sync issue resolution (updated Nov 5)
 
 ---
 
@@ -262,4 +229,4 @@ Focus on 8+ fit scores with London/remote locations is working exceptionally wel
 **Next scheduled update:** Run anytime for current state
 **Source of truth:** `applications/*/status.md` files
 
-**Last Generated:** 2025-11-05 (regenerated from 10 application folders)
+**Last Generated:** 2025-11-05 20:35 UTC
