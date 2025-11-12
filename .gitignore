@@ -172,6 +172,9 @@ career-preferences.md
 # Personal job shortlist with real company names (use .template.md to create)
 MASTER-SHORTLIST.md
 
+# Auto-generated status file with application data (use .template.md to create)
+STATUS.md
+
 # ============================================
 # KEEP CERTAIN EXAMPLE FILES
 # ============================================

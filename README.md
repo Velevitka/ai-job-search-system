@@ -74,6 +74,30 @@ Status: applied
 
 See [USAGE-GUIDE.md](docs/usage/USAGE-GUIDE.md) for detailed usage instructions.
 
+## 🔒 Privacy & Security
+
+**⚠️ IMPORTANT:** This system contains sensitive personal data (CVs, compensation expectations, visa status, company names).
+
+**3-Layer Protection:**
+1. **.gitignore** - Blocks personal files from being added
+2. **Pre-commit hook** - Scans commits for personal data patterns
+3. **Template pattern** - Personal files (`.md`) are gitignored, templates (`.template.md`) are tracked
+
+**Protected files:**
+- `career-preferences.md` - Your preferences (gitignored)
+- `MASTER-SHORTLIST.md` - Your job targets (gitignored)
+- `applications/` - All CVs and cover letters (gitignored)
+- `insights/` - Your metrics (gitignored)
+
+**To set up:**
+```bash
+# Copy templates and customize
+cp career-preferences.template.md career-preferences.md
+cp MASTER-SHORTLIST.template.md MASTER-SHORTLIST.md
+```
+
+**📖 Full documentation:** [docs/reference/PRIVACY-PROTECTION.md](docs/reference/PRIVACY-PROTECTION.md)
+
 ## 📁 Folder Structure
 
 ```
