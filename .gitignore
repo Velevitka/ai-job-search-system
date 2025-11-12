@@ -163,6 +163,16 @@ TODO_PERSONAL.md
 personal-notes/
 
 # ============================================
+# PERSONAL CONFIGURATION
+# ============================================
+
+# Personal career preferences (use .template.md to create)
+career-preferences.md
+
+# Personal job shortlist with real company names (use .template.md to create)
+MASTER-SHORTLIST.md
+
+# ============================================
 # KEEP CERTAIN EXAMPLE FILES
 # ============================================
 
