@@ -88,6 +88,30 @@ Under Vrbo role, add: "Drove user segmentation strategy via CDP implementation"
 
 ## Output Structure
 
+### Step 1: Move Job to Active Pipeline
+
+**IMPORTANT:** Before creating application files, move the job from shortlist/discovery to active pipeline:
+
+1. **Find the job file** in `staging/2-shortlist/high/` or `staging/2-shortlist/medium/`or `staging\0-discovery`
+   - May be a `.mhtml` file, `.md` file, or inside a folder
+   - Search by company name (case-insensitive)
+
+2. **Move to 3-applying/**
+   ```bash
+   mv staging/2-shortlist/high/[job-file] staging/3-applying/
+   ```
+
+3. **Notify user:**
+   ```
+   ✅ Moved [CompanyName] from shortlist → staging/3-applying/
+   ```
+
+**If job file not found in shortlist:**
+- Check if it's already in `3-applying/` (may have been moved manually)
+- If not found anywhere, proceed anyway (may be pasted JD)
+
+### Step 2: Create Application Folder
+
 Create folder: `applications/YYYY-MM-CompanyName-RoleTitle/`
 
 Generate two files:

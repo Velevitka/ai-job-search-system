@@ -92,6 +92,51 @@ Update or create: `applications/.../status.md`
 [What worked - extract from notes]
 ```
 
+### Step 3.5: Archive Job File (If Pipeline Complete)
+
+**IMPORTANT:** When application pipeline is complete, move job file from `staging/3-applying/` to archive:
+
+#### Archive Triggers:
+
+**1. Status = `rejected`**
+```bash
+# Find job file in staging/3-applying/
+# Move to: staging/archive/rejected/
+
+mv staging/3-applying/[company-file] staging/archive/rejected/
+```
+**Notify:** `✅ Archived [Company] to staging/archive/rejected/`
+
+**2. Status = `accepted` or `offer` (if accepting)**
+```bash
+# Move to: staging/archive/accepted/
+
+mkdir -p staging/archive/accepted
+mv staging/3-applying/[company-file] staging/archive/accepted/
+```
+**Notify:** `✅ Archived [Company] to staging/archive/accepted/`
+
+**3. Status = `withdrawn`**
+```bash
+# Move to: staging/archive/withdrawn/
+
+mv staging/3-applying/[company-file] staging/archive/withdrawn/
+```
+**Notify:** `✅ Archived [Company] to staging/archive/withdrawn/`
+
+#### DO NOT Archive When:
+- ❌ Status = `applied` (still active, awaiting response)
+- ❌ Status = `interview-invited` (still active)
+- ❌ Status = `interview-completed` (still active, awaiting next round)
+
+**Job stays in `staging/3-applying/` while active in pipeline.**
+
+#### File Not Found?
+If job file not found in `staging/3-applying/`:
+- May have been archived manually already
+- May have been moved from shortlist directly (skip archive step)
+- Proceed with status update anyway
+
 ### Step 4: Trigger Context-Specific Actions
 
 #### If Status = `rejected`
