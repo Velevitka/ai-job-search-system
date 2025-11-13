@@ -95,6 +95,7 @@ Under Vrbo role, add: "Drove user segmentation strategy via CDP implementation"
 1. **Find the job file** in `staging/2-shortlist/high/` or `staging/2-shortlist/medium/`or `staging\0-discovery`
    - May be a `.mhtml` file, `.md` file, or inside a folder
    - Search by company name (case-insensitive)
+   - **Remember the exact filename** - you'll need it for the `source_file` field
 
 2. **Move to 3-applying/**
    ```bash
@@ -106,9 +107,64 @@ Under Vrbo role, add: "Drove user segmentation strategy via CDP implementation"
    ✅ Moved [CompanyName] from shortlist → staging/3-applying/
    ```
 
+4. **Record the filename:**
+   - When creating `job-description.md`, set `source_file: "[exact-filename.mhtml]"`
+   - Use the EXACT filename including spaces and special characters
+   - This creates an explicit link between the application folder and the job file
+
 **If job file not found in shortlist:**
 - Check if it's already in `3-applying/` (may have been moved manually)
-- If not found anywhere, proceed anyway (may be pasted JD)
+- If found, use its filename for `source_file`
+- If not found anywhere, set `source_file: "N/A - Pasted JD"` (may be pasted JD)
+
+### Step 1.5: Check for Duplicate Applications (MANDATORY)
+
+**BEFORE creating any folders**, check if applications to this company already exist:
+
+1. **Search for existing applications:**
+   ```bash
+   ls applications/ | grep -i "CompanyName"
+   ```
+
+2. **If matches found:**
+   - Read the `analysis.md` file from each existing application to get role title and fit score
+   - Display to user:
+     ```
+     ⚠️ DUPLICATE DETECTION: Found existing application(s) to [Company Name]:
+
+     1. applications/2025-11-CompanyName-RoleTitle1/
+        Role: [Role Title]
+        Fit Score: X/10
+        Status: [from status.md if exists, or "Analysis Phase"]
+
+     2. applications/2025-11-CompanyName-RoleTitle2/
+        Role: [Role Title 2]
+        Fit Score: Y/10
+        Status: [status]
+
+     ❓ Is this a DIFFERENT role at the same company?
+     ```
+
+3. **User Decision:**
+   - If **YES (different role)**: Continue with analysis, ensure folder name is unique
+   - If **NO (same role)**: Stop and inform user:
+     ```
+     ❌ Duplicate application detected.
+
+     To update existing analysis:
+     - Review: applications/YYYY-MM-CompanyName-RoleTitle/analysis.md
+     - Update status: /update-status CompanyName [new-status]
+
+     To reanalyze: Delete the existing folder first.
+     ```
+
+4. **If NO matches found:**
+   - Proceed directly to Step 2 (Create Application Folder)
+
+**Why This Matters:**
+- Prevents accidentally applying to same role twice
+- Highlights when companies have multiple open roles
+- Maintains data integrity in application tracking system
 
 ### Step 2: Create Application Folder
 
@@ -118,11 +174,16 @@ Generate two files:
 
 ### 1. `job-description.md`
 ```markdown
-# Job Description - [Company Name] - [Role Title]
+---
+company: [Company Name]
+role: [Job Title]
+date_saved: YYYY-MM-DD
+source: [URL or "Pasted"]
+source_file: "[exact-filename.mhtml]"
+status: Analysis Phase
+---
 
-**Date Saved:** YYYY-MM-DD
-**Source:** [URL or "Pasted"]
-**Status:** Analysis Phase
+# Job Description - [Company Name] - [Role Title]
 
 ## Company
 [Company Name]

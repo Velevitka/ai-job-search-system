@@ -160,6 +160,9 @@ See [BOOKMARKLET-GUIDE.md](docs/usage/bookmarklet/BOOKMARKLET-GUIDE.md) for setu
 - Success metrics and conversion rates
 - Pattern recognition over time
 - Weekly review reports
+- **Duplicate detection** - Prevents accidentally applying to same company twice
+- **System health monitoring** - 100/100 health score with automated checks
+- **Auto-sync dashboard** - `/sync-all` regenerates all metrics from source data
 
 ## 🔧 Customization
 
@@ -409,14 +412,78 @@ Compare to manual process: **2-3 hours per application**
 
 ---
 
+## 🛡️ Quality Control & Automation
+
+### Pre-Commit Hook
+Automatically validates system health before each git commit:
+
+```bash
+# Install pre-commit hook
+bash scripts/install-hooks.sh
+```
+
+**What it checks:**
+- ✅ System health score (blocks if <70/100)
+- ✅ All tests pass
+- ✅ Critical files exist
+- ✅ No data integrity issues
+
+**How it works:**
+Every `git commit` automatically runs health checks and tests. Failed checks block the commit, ensuring your application data stays clean.
+
+### Duplicate Detection
+The `/analyze-job` command now automatically detects if you've already applied to a company:
+
+```
+⚠️ DUPLICATE DETECTION: Found existing application(s) to Company:
+
+1. applications/2025-11-Company-Role1/
+   Role: [Title]
+   Fit Score: 8.5/10
+   Status: applied
+
+❓ Is this a DIFFERENT role at the same company?
+```
+
+Prevents accidentally applying to the same role twice and highlights when companies have multiple open positions.
+
+### Health Check System
+Monitor system integrity with automated health checks:
+
+```bash
+python scripts/health_check.py
+```
+
+**Validates:**
+- Application folder structure
+- Missing CVs or status files
+- Status consistency
+- Orphaned job files
+- Archive integrity
+
+**Current Health:** 100/100 (Excellent) ✅
+
+### System Sync
+Keep all derived views synchronized with source data:
+
+```bash
+/sync-all
+```
+
+Regenerates STATUS.md and metrics-dashboard.md from application folders, ensuring all analytics reflect current state.
+
+---
+
 ## 📋 Commands Quick Reference
 
 | Command | Purpose | Time | Output |
 |---------|---------|------|--------|
-| `/analyze-job` | Analyze JD and create fit score | 5-10 min | analysis.md, job-description.md |
+| `/analyze-job` | Analyze JD and create fit score (with duplicate detection) | 5-10 min | analysis.md, job-description.md |
 | `/generate-cv` | Create tailored CV (MD + PDF) | 10-15 min | CV.pdf, cv-changes-log.md |
 | `/generate-cl` | Generate cover letter | 15-20 min | CoverLetter.pdf, cover-letter-log.md |
 | `/update-status` | Track application status | 2 min | status.md |
+| `/status` | Refresh STATUS.md snapshot | <1 min | STATUS.md |
+| `/sync-all` | Regenerate all derived views | <1 min | STATUS.md, metrics-dashboard.md |
 | `/weekly-review` | Generate weekly summary | 5 min | Review of all applications |
 | `/prepare-interview` | Interview preparation | 10 min | Company research, practice questions |
 

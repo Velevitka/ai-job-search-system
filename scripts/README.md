@@ -415,6 +415,214 @@ REMEDIATION STEPS:
 - CV Guardrails: `docs/cv-formatting-guardrails.md`
 - Cover Letter Guardrails: `docs/cover-letter-formatting-guardrails.md`
 
+---
+
+## Git Pre-Commit Hook
+
+Automatically validate system health and run tests before each commit to prevent data integrity issues.
+
+### What It Does
+
+The pre-commit hook runs before each `git commit` and:
+
+1. **Runs Health Check** (`health_check.py`)
+   - Validates application folder structure
+   - Checks for missing CVs (status='applied' requires CV)
+   - Verifies status consistency
+   - Detects orphaned job files
+   - Exit code 1 (Poor health <70/100) **blocks commit**
+
+2. **Runs Tests** (`pytest tests/`)
+   - Validates all unit tests pass
+   - Ensures code changes don't break functionality
+   - Test failures **block commit**
+
+3. **Validates Critical Files**
+   - Ensures master CV exists
+   - Verifies core scripts are present
+
+### Installation
+
+**Quick Install (Recommended):**
+```bash
+# From repository root
+bash scripts/install-hooks.sh
+```
+
+**Manual Install:**
+```bash
+# Copy hook to git hooks directory
+cp scripts/pre-commit-hook.sh .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+### What You'll See
+
+**When all checks pass:**
+```
+==========================================
+Pre-Commit Hook: CV Application Tracker
+==========================================
+
+📊 Running system health check...
+
+Health Score: 85/100 (Good)
+✅ Health check passed (Excellent: 85-100)
+
+🧪 Running automated tests...
+
+tests/test_health_check.py::test_basic_health_check PASSED
+tests/test_update_status.py::test_status_update PASSED
+
+✅ All tests passed
+
+📁 Validating critical files...
+✅ Critical files present
+
+==========================================
+✅ All checks passed - proceeding with commit
+==========================================
+```
+
+**When health check fails:**
+```
+❌ Health check failed (Poor: <70)
+   Critical issues detected. Fix before committing:
+   - Missing CVs for 'applied' status
+   - Invalid status values
+   - Broken application structure
+
+❌ Pre-commit checks failed
+
+To bypass this hook (NOT recommended):
+  git commit --no-verify
+```
+
+### Configuration
+
+**Customize Behavior:**
+
+Edit `.git/hooks/pre-commit` to:
+- Skip tests if pytest not installed
+- Change health check threshold
+- Add custom validation steps
+
+**Example: Allow commits with Fair health (70-84):**
+```bash
+# In .git/hooks/pre-commit, change:
+if [ $health_exit -eq 1 ]; then
+    # ... block commit
+fi
+
+# To:
+if [ $health_exit -eq 1 ]; then
+    # Allow Fair health (exit 2), block only Poor (exit 1)
+    all_passed=false
+fi
+```
+
+### Bypass Hook (Use Sparingly)
+
+When you need to commit despite failures:
+
+```bash
+# Bypass pre-commit hook
+git commit --no-verify -m "WIP: fixing critical issues"
+```
+
+**When to use `--no-verify`:**
+- Emergency hotfixes
+- Work-in-progress commits on feature branches
+- Known issues that will be fixed in next commit
+
+**When NOT to use:**
+- Committing to main/master branch
+- Before pushing to remote
+- When health check shows critical issues
+
+### Uninstall
+
+```bash
+# Remove pre-commit hook
+rm .git/hooks/pre-commit
+```
+
+### Troubleshooting
+
+**Hook not running:**
+- Check file exists: `ls -la .git/hooks/pre-commit`
+- Check executable: `chmod +x .git/hooks/pre-commit`
+
+**Python/pytest not found:**
+- Activate virtual environment before committing
+- Install dependencies: `pip install pytest`
+
+**Health check fails unexpectedly:**
+- Run manually: `python scripts/health_check.py`
+- Check exit code: `echo $?` (Unix) or `echo %errorlevel%` (Windows)
+- Review health report: `cat insights/health-check-*.md`
+
+**Tests fail unexpectedly:**
+- Run manually: `pytest tests/`
+- Check specific test: `pytest tests/test_health_check.py -v`
+
+### Integration with Workflow
+
+**Recommended Workflow:**
+
+```bash
+# 1. Make changes to application files
+/analyze-job OpenTable
+/update-status OpenTable applied
+
+# 2. Review changes
+git status
+git diff
+
+# 3. Commit (pre-commit hook runs automatically)
+git add applications/
+git commit -m "feat: add OpenTable application"
+
+# Pre-commit hook runs:
+# ✅ Health check passes
+# ✅ Tests pass
+# ✅ Commit successful
+
+# 4. Push to remote
+git push
+```
+
+**If pre-commit hook fails:**
+
+```bash
+# 1. Fix issues identified by hook
+python scripts/health_check.py  # See what's wrong
+pytest tests/  # See which tests fail
+
+# 2. Fix the issues
+# ...
+
+# 3. Try commit again
+git commit -m "feat: add OpenTable application"
+# Now passes!
+```
+
+### Benefits
+
+- **Prevents Bad Commits:** Catches data integrity issues before they're committed
+- **Maintains Quality:** Ensures tests pass before code is committed
+- **Saves Time:** Catches issues locally before CI/CD or manual review
+- **Team Consistency:** All contributors follow same validation process
+- **Peace of Mind:** Know your application data is always valid
+
+### Related Scripts
+
+- `scripts/health_check.py` - Core health validation logic
+- `scripts/update_status.py` - Status management (validates on update)
+- `tests/*` - Automated test suite
+
+---
+
 ## Troubleshooting
 
 ### pdfinfo not found
