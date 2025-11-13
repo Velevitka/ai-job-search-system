@@ -35,18 +35,53 @@ Create a tailored CV for Artur Swadzba based on the job analysis, with human rev
 
 ## Input
 The user will provide a company name. You will work with:
-- `master/ArturSwadzba_MasterCV.docx` (source of truth)
+- `master/ArturSwadzba_MasterCV_Updated.md` (PRIMARY source of truth - most recent)
+- `master/ArturSwadzba_MasterCV_NOTES.md` (CRITICAL positioning guidance)
+- `master/ArturSwadzba_MasterCV.pdf` (visual reference only, if needed)
 - `applications/YYYY-MM-CompanyName-Role/analysis.md` (fit analysis with keywords)
+
+**DO NOT READ:** `master/ArturSwadzba_MasterCV.docx` (superseded, ignore entirely)
 
 ## Process
 
-### Step 1: Read Required Files
-1. Read `master/ArturSwadzba_MasterCV.docx`
-2. Find the application folder matching the company name
-3. Read `applications/.../analysis.md` for:
+### Step 1: Read Required Files (OPTIMIZED ORDER)
+
+**MANDATORY - Read in this exact order:**
+
+1. **Primary Source (FULL FILE):**
+   ```
+   Read master/ArturSwadzba_MasterCV_Updated.md
+   ```
+   - This is the parseable, up-to-date CV content
+   - Contains all current achievements, metrics, dates
+   - Markdown format = easy to parse and modify
+
+2. **Critical Positioning Context (FULL FILE):**
+   ```
+   Read master/ArturSwadzba_MasterCV_NOTES.md
+   ```
+   - CRITICAL clarifications for accurate positioning:
+     * **Demand-side focus** (NOT supply-side) at Vrbo
+     * **Multi-market leadership** (London core team, Austin, Sydney)
+     * **App-first mobile platform** experience at Chase
+     * **European market experience** (not US-only)
+   - Read THIS BEFORE tailoring to avoid positioning errors
+
+3. **Application Analysis:**
+   ```
+   Read applications/YYYY-MM-CompanyName-Role/analysis.md
+   ```
    - Keywords to integrate
    - Bullet point optimization recommendations
    - Strong points to emphasize
+
+**OPTIONAL - Read only if explicitly needed:**
+- `master/cv-snippets.md` - Alternative phrasings for specific contexts
+- `master/master-cv-changelog.md` - Recent changes context
+
+**DO NOT READ:**
+- ❌ `master/ArturSwadzba_MasterCV.docx` (superseded, ignore)
+- ❌ `master/ai-product-*.md` files (archived, already incorporated)
 
 ### Step 2: Create CV Tailoring Plan (Markdown First)
 

@@ -69,9 +69,12 @@ Create a tailored cover letter for Artur Swadzba that tells a strategic story, a
 
 ## Input
 The user will provide a company name. You will work with:
-- `master/ArturSwadzba_MasterCV.docx` (for achievements)
+- `master/ArturSwadzba_MasterCV_Updated.md` (PRIMARY - for achievements)
+- `master/ArturSwadzba_MasterCV_NOTES.md` (CRITICAL - for positioning context)
 - `applications/.../analysis.md` (for cover letter strategy)
 - `applications/.../job-description.md` (for company/role context)
+
+**DO NOT READ:** `master/ArturSwadzba_MasterCV.docx` (superseded, ignore entirely)
 
 ---
 
