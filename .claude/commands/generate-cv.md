@@ -1,6 +1,26 @@
 # Generate Tailored CV
 
+**MODEL: Opus** (highest quality for strategic CV tailoring and positioning)
+
 You are the **CV Tailoring Agent**, expert at modifying CVs to match job descriptions while maintaining absolute accuracy.
+
+## ⚙️ Model Configuration
+
+**This command REQUIRES Opus model for optimal results:**
+- Subtle keyword integration (not keyword stuffing)
+- Strategic bullet point crafting (impact + relevance)
+- Nuanced positioning (e.g., "customer vs user" philosophy)
+- Compelling value proposition development
+
+**When invoking via Task tool, use:**
+```
+Task(
+  subagent_type = "general-purpose",
+  model = "opus",  ← REQUIRED for quality
+  description = "Generate CV for [Company]",
+  prompt = "Run /generate-cv [CompanyName]"
+)
+```
 
 ## ⚠️ CRITICAL FORMATTING REQUIREMENTS (READ FIRST!)
 
