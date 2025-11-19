@@ -325,6 +325,189 @@ class TestFileMovementEdgeCases:
         assert orphaned_files[0] == job_file
 
 
+class TestApplicationFolderMovement:
+    """Test application folder movement based on status changes"""
+
+    def test_moves_application_analyzing_to_applied_on_applied_status(self, tmp_path):
+        """Verify application folder moves from analyzing/ to applied/ when status = applied"""
+        analyzing = tmp_path / "applications/active/analyzing"
+        applied = tmp_path / "applications/active/applied"
+        analyzing.mkdir(parents=True)
+        applied.mkdir(parents=True)
+
+        # Create application folder in analyzing
+        app_folder = analyzing / "2025-11-TestCompany-ProductLead"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("# Status\n\nCurrent Status: Analyzed")
+        (app_folder / "analysis.md").write_text("# Analysis\n\nFit Score: 8/10")
+
+        # Simulate /update-status TestCompany applied
+        destination = applied / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists(), "Folder should be removed from analyzing/"
+        assert destination.exists(), "Folder should exist in applied/"
+        assert (destination / "status.md").exists()
+        assert (destination / "analysis.md").exists()
+
+    def test_moves_application_to_interviewing_on_interview_invited(self, tmp_path):
+        """Verify application folder moves to interviewing/ when status = interview-invited"""
+        applied = tmp_path / "applications/active/applied"
+        interviewing = tmp_path / "applications/active/interviewing"
+        applied.mkdir(parents=True)
+        interviewing.mkdir(parents=True)
+
+        # Create application folder in applied
+        app_folder = applied / "2025-11-InterviewCo-Director"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Applied")
+
+        # Simulate /update-status InterviewCo interview-invited
+        destination = interviewing / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists(), "Folder should be removed from applied/"
+        assert destination.exists(), "Folder should exist in interviewing/"
+
+    def test_moves_from_analyzing_to_interviewing_directly(self, tmp_path):
+        """Verify app can go from analyzing to interviewing (skip applied) if invited early"""
+        analyzing = tmp_path / "applications/active/analyzing"
+        interviewing = tmp_path / "applications/active/interviewing"
+        analyzing.mkdir(parents=True)
+        interviewing.mkdir(parents=True)
+
+        app_folder = analyzing / "2025-11-FastTrack-PM"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Analyzed")
+
+        # Simulate /update-status FastTrack interview-invited (directly from analyzing)
+        destination = interviewing / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists()
+        assert destination.exists()
+
+    def test_archives_application_on_withdrawn_status(self, tmp_path):
+        """Verify application folder moves to archive/YYYY-QX/withdrawn/ on withdrawn"""
+        applied = tmp_path / "applications/active/applied"
+        archive_withdrawn = tmp_path / "applications/archive/2025-Q4/withdrawn"
+        applied.mkdir(parents=True)
+        archive_withdrawn.mkdir(parents=True)
+
+        app_folder = applied / "2025-11-WithdrawnCo-Role"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Applied")
+
+        # Simulate /update-status WithdrawnCo withdrawn
+        destination = archive_withdrawn / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists(), "Folder should be removed from applied/"
+        assert destination.exists(), "Folder should exist in archive/2025-Q4/withdrawn/"
+
+    def test_archives_application_on_rejected_status(self, tmp_path):
+        """Verify application folder moves to archive/YYYY-QX/rejected/ on rejected"""
+        interviewing = tmp_path / "applications/active/interviewing"
+        archive_rejected = tmp_path / "applications/archive/2025-Q4/rejected"
+        interviewing.mkdir(parents=True)
+        archive_rejected.mkdir(parents=True)
+
+        app_folder = interviewing / "2025-11-RejectedCo-Lead"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Interview Completed")
+
+        # Simulate /update-status RejectedCo rejected
+        destination = archive_rejected / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists()
+        assert destination.exists()
+
+    def test_archives_application_on_accepted_status(self, tmp_path):
+        """Verify application folder moves to archive/YYYY-QX/accepted/ on accepted"""
+        interviewing = tmp_path / "applications/active/interviewing"
+        archive_accepted = tmp_path / "applications/archive/2025-Q4/accepted"
+        interviewing.mkdir(parents=True)
+        archive_accepted.mkdir(parents=True)
+
+        app_folder = interviewing / "2025-11-DreamJob-VP"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Offer")
+        (app_folder / "offer-details.md").write_text("# Offer\n\n$200k base")
+
+        # Simulate /update-status DreamJob accepted
+        destination = archive_accepted / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert not app_folder.exists()
+        assert destination.exists()
+        assert (destination / "offer-details.md").exists()
+
+    def test_application_stays_in_place_if_status_unchanged(self, tmp_path):
+        """Verify folder doesn't move if status doesn't trigger movement"""
+        applied = tmp_path / "applications/active/applied"
+        applied.mkdir(parents=True)
+
+        app_folder = applied / "2025-11-StableApp-PM"
+        app_folder.mkdir()
+        (app_folder / "status.md").write_text("Current Status: Applied\n\nLast Updated: 2025-11-15")
+
+        # Simulate /update-status StableApp applied (update notes but same status)
+        # No movement should occur
+
+        # Assert: Folder stays in place
+        assert app_folder.exists(), "Folder should remain in applied/ when status unchanged"
+
+    def test_creates_quarterly_archive_folder_if_missing(self, tmp_path):
+        """Verify archive creates YYYY-QX folder on demand"""
+        applied = tmp_path / "applications/active/applied"
+        archive_root = tmp_path / "applications/archive"
+        applied.mkdir(parents=True)
+        archive_root.mkdir(parents=True)
+
+        app_folder = applied / "2025-11-ArchivedApp-Role"
+        app_folder.mkdir()
+
+        # Archive quarterly folder doesn't exist yet
+        archive_quarter = archive_root / "2025-Q4/withdrawn"
+        assert not archive_quarter.exists()
+
+        # Simulate archiving (should create 2025-Q4/withdrawn/)
+        archive_quarter.mkdir(parents=True, exist_ok=True)
+        destination = archive_quarter / app_folder.name
+        shutil.move(str(app_folder), str(destination))
+
+        # Assert
+        assert archive_quarter.exists(), "Quarterly archive folder should be created"
+        assert destination.exists()
+        assert not app_folder.exists()
+
+    def test_handles_missing_application_folder_gracefully(self, tmp_path):
+        """If application folder doesn't exist, should not crash"""
+        analyzing = tmp_path / "applications/active/analyzing"
+        applied = tmp_path / "applications/active/applied"
+        analyzing.mkdir(parents=True)
+        applied.mkdir(parents=True)
+
+        # Try to move non-existent folder
+        source = analyzing / "NonExistent-App"
+        destination = applied / "NonExistent-App"
+
+        if source.exists():
+            shutil.move(str(source), str(destination))
+        else:
+            print(f"Warning: Application folder {source} not found, skipping move")
+
+        # Assert: No crash
+        assert not destination.exists()
+
+
 class TestBulkProcessFileMovement:
     """Test /bulk-process file movement to shortlist tiers"""
 

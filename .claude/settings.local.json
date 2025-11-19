@@ -1,26 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.linkedin.com)",
-      "Bash(mkdir:*)",
-      "WebFetch(domain:careers.virginatlantic.com)",
-      "Bash(pandoc:*)",
-      "WebFetch(domain:www.sumup.com)",
-      "SlashCommand(/analyze-job:*)",
-      "WebSearch",
-      "WebFetch(domain:careers.instapro.group)",
-      "WebFetch(domain:job-boards.greenhouse.io)",
-      "WebFetch(domain:www.redcare-pharmacy.com)",
-      "WebFetch(domain:www.yelp.careers)",
-      "WebFetch(domain:apply.workable.com)",
-      "Bash(python scripts/validate-cv.py:*)",
-      "Bash(pdfinfo:*)",
-      "Bash(python:*)",
-      "WebFetch(domain:app.careerpuck.com)",
-      "WebFetch(domain:jobs.lever.co)",
-      "Bash(git add:*)"
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "system": "You are an analytical, factual, and concise assistant. Respond in a dry tone — no greetings, no emotional phrasing, no filler, no exclamation marks, and no em dashes. Use short, direct sentences. When referring to yourself, say 'Claude'. When referring to the user, use their name if available; otherwise, say 'the user'."
 }

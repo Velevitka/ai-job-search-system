@@ -27,19 +27,33 @@ Task(
 **THE CV MUST:**
 - ✅ Use **Eisvogel template** (`--template eisvogel` in pandoc command)
 - ✅ Be **2 pages maximum** (like master CV)
-- ✅ Use **minimal or NO YAML** front matter
+- ✅ Use **standard YAML template** (see below)
 - ✅ Be **A4 paper size** (595 x 842 pts)
-- ✅ Have **file size 60-80KB** (Eisvogel typical range)
+- ✅ Have **file size 40-100KB** (Eisvogel typical range)
 
-**NEVER USE:**
+**SAFE TO USE (Compatible with Eisvogel):**
+- ✅ `geometry: margin=20mm` (or 18mm if needed)
+- ✅ `fontsize: 10.5pt` (or 10pt if needed)
+- ✅ `linestretch: 1.0` (or 0.95 if needed)
+- ✅ `papersize: a4` (optional, Eisvogel defaults to A4)
+
+**NEVER USE (Breaks Eisvogel):**
 - ❌ `documentclass: article` in YAML
 - ❌ `header-includes:` with custom LaTeX
-- ❌ `geometry: margin=` settings
 - ❌ Custom `\usepackage` or `\titleformat` commands
+- ❌ Custom `mainfont:` or `sansfont:` (Eisvogel handles this)
 
-**Why?** These create 4+ page CVs with huge margins and wrong fonts. **Always validate after generation!**
+**Why?** Custom document classes and LaTeX overrides break the Eisvogel template and create 4+ page CVs with wrong fonts. **Always validate after generation!**
 
-Reference working example: `applications/2025-11-VirginAtlantic-DigitalProductLead/ArturSwadzba_CV_VirginAtlantic.pdf`
+**Default YAML Template (use this unless you need compression):**
+```yaml
+---
+geometry: margin=20mm
+fontsize: 10.5pt
+---
+```
+
+Reference working example: `applications/2025-11-TrustedHousesitters-DirectorProduct/ArturSwadzba_CV_TrustedHousesitters.pdf`
 
 ---
 
@@ -187,6 +201,46 @@ Please review the proposed changes:
 
 **Wait for human approval before continuing.**
 
+### Step 3.5: Pre-Generation Length Check (Auto-Select YAML)
+
+Before generating the PDF, estimate content length to choose the right YAML template:
+
+**Check word count in approved markdown:**
+```bash
+# Count words (excluding YAML front matter)
+wc -w applications/.../ArturSwadzba_CV_[CompanyName].md
+```
+
+**Auto-select YAML based on word count:**
+
+**If <1400 words:** Use **standard YAML** (comfortable fit)
+```yaml
+---
+geometry: margin=20mm
+fontsize: 10.5pt
+---
+```
+
+**If 1400-1600 words:** Use **compressed YAML** (borderline)
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt
+---
+```
+
+**If >1600 words:** Use **maximum compression** and warn user
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt
+linestretch: 0.95
+---
+```
+⚠️ Display warning: "Word count is {count} words. This may still exceed 2 pages. Consider condensing content if validation fails."
+
+**Why this helps:** Predicting length before PDF generation reduces regeneration cycles and provides predictable outcomes.
+
 ### Step 4: Generate Tailored CV (After Approval)
 
 Only after human says "approved":
@@ -195,25 +249,38 @@ Only after human says "approved":
 2. Apply all modifications to master CV content
 3. Create MARKDOWN VERSION first: `applications/.../ArturSwadzba_CV_[CompanyName].md`
 
-**CRITICAL: Markdown document must include ONLY this minimal YAML front matter:**
+**CRITICAL: Use the standard YAML template that works with Eisvogel:**
 
+**Default YAML (Start with this - works for ~90% of CVs):**
 ```yaml
 ---
-# MINIMAL YAML FOR EISVOGEL TEMPLATE - DO NOT ADD MORE!
-# Adding custom documentclass, header-includes, or geometry will BREAK formatting!
+geometry: margin=20mm
+fontsize: 10.5pt
 ---
 ```
 
-**OR use NO YAML at all - just start with markdown content.**
+**Compressed YAML (Use if word count check suggests >1400 words):**
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt
+linestretch: 0.95
+---
+```
 
-**❌ DO NOT USE:**
-- `documentclass: article`
-- `header-includes:` with custom LaTeX
-- `geometry: margin=` settings
-- Custom `\usepackage` commands
-- Manual `\titleformat` configurations
+**✅ SAFE with Eisvogel:**
+- `geometry: margin=20mm` (or 18mm)
+- `fontsize: 10.5pt` (or 10pt)
+- `linestretch: 1.0` (or 0.95)
 
-**Why?** Eisvogel template handles ALL formatting automatically. Custom YAML overrides break the professional layout and create 4+ page CVs with huge margins.
+**❌ NEVER USE (Breaks Eisvogel):**
+- `documentclass: article` - overrides Eisvogel completely
+- `header-includes:` with custom LaTeX - conflicts with template
+- `\usepackage` commands - breaks template compatibility
+- `\titleformat` or `\titlespacing` - layout conflicts
+- Custom `mainfont:` or `sansfont:` - Eisvogel manages fonts
+
+**Why use YAML at all?** The standard template provides optimal margins (20mm) and font size (10.5pt) that work reliably with Eisvogel while keeping CVs to 2 pages.
 
 **Markdown formatting requirements:**
 - Use simple markdown only - NO LaTeX commands
@@ -285,44 +352,60 @@ cd "applications/YYYY-MM-CompanyName-Role" && pandoc ArturSwadzba_CV_CompanyName
 
 ### Step 5: Post-Generation Validation (MANDATORY)
 
-After creating PDF, **IMMEDIATELY run these validation checks:**
+After creating PDF, **IMMEDIATELY run comprehensive validation:**
 
 ```bash
-# Check 1: Verify PDF was created
-ls -lh ArturSwadzba_CV_[CompanyName].pdf
-
-# Check 2: Count pages (MUST be 2 or less)
-pdfinfo ArturSwadzba_CV_[CompanyName].pdf | grep Pages
-
-# Check 3: Check file size (should be 60-80KB for Eisvogel)
-du -h ArturSwadzba_CV_[CompanyName].pdf
-
-# Check 4: Verify it's A4 paper size
-pdfinfo ArturSwadzba_CV_[CompanyName].pdf | grep "Page size"
+# Run unified validation script (replaces 4 manual checks)
+python scripts/validate-cv.py "applications/.../ArturSwadzba_CV_[CompanyName].pdf" "applications/.../ArturSwadzba_CV_[CompanyName].md"
 ```
 
-**STOP IMMEDIATELY if:**
-- ❌ **Page count > 2 pages** - FORMATTING BROKEN, regenerate with correct YAML
-- ❌ **File size < 40KB or > 100KB** - Wrong template used
-- ❌ **Paper size not A4 (595 x 842 pts)** - Wrong configuration
+**The script validates:**
+- ✅ File exists
+- ✅ Page count (≤2 pages)
+- ✅ File size (40-100KB for Eisvogel)
+- ✅ Paper size (A4: 595 x 842 pts)
+- ✅ Word count (with density warnings)
+- ✅ Eisvogel template indicators
 
-**If validation FAILS:**
-1. Check the markdown YAML - remove all custom documentclass/header-includes
-2. Ensure pandoc command includes `--template eisvogel`
-3. Regenerate and validate again
+**If validation FAILS (script returns exit code 1):**
 
-**If validation PASSES:**
-Display to user:
+**Automatic recovery sequence:**
+
+1. **If page count > 2 pages:**
+   - Read current YAML settings
+   - If using 20mm/10.5pt → Regenerate with 18mm/10pt
+   - If using 18mm/10pt → Regenerate with 18mm/10pt/0.95 linestretch
+   - If using max compression → Warn user: "Content too long ({word_count} words). Recommend condensing before regeneration."
+
+2. **If file size wrong (<40KB or >100KB):**
+   - Check pandoc command includes `--template eisvogel`
+   - If missing → Add template flag and regenerate
+   - If present → Check YAML for documentclass overrides, remove them, regenerate
+
+3. **If paper size wrong:**
+   - Add `papersize: a4` to YAML
+   - Regenerate
+
+**Display recovery attempt:**
+```
+⚠️ Validation failed: {issue}
+🔧 Auto-recovery: Trying {solution}...
+[Regenerating PDF with adjusted settings...]
+```
+
+**After auto-recovery, validate again.**
+- If passes → Continue to success message
+- If still fails → Display error and recommendations from validate-cv.py script
+
+**If validation PASSES (script returns exit code 0):**
+Display the validation script output, then add:
 ```
 ✅ Tailored CV generated and VALIDATED:
    - ArturSwadzba_CV_[CompanyName].md (markdown source)
    - ArturSwadzba_CV_[CompanyName].pdf (final PDF)
 
-📊 Validation Results:
-✅ Page count: X pages (must be ≤ 2)
-✅ File size: XKB (target: 60-80KB)
-✅ Paper size: A4 (595 x 842 pts)
-✅ Template: Eisvogel
+📊 Validation Results: (shown above from validate-cv.py)
+   All checks passed ✅
 
 📋 Final manual verification checklist:
 1. Open the PDF file and review formatting
@@ -455,71 +538,78 @@ If master CV is 3 pages and needs to fit 2 pages:
 
 ## Troubleshooting Formatting Issues
 
-### Problem: CV is 3+ pages instead of 2 pages
+### Problem: CV is >2 pages
 
-**⚠️ CRITICAL: FOLLOW FORMATTING HIERARCHY - DO NOT REMOVE CONTENT FIRST!**
+**✅ GOOD NEWS:** Auto-recovery handles this automatically (see Step 5)
+
+**Manual fix sequence (if needed):**
 
 **MANDATORY ORDER:**
-1. **FIRST:** Adjust margins (20mm optimal, 18mm acceptable)
-2. **SECOND:** Adjust font size (11pt ideal, 10pt acceptable)
-3. **THIRD:** Adjust line/paragraph spacing
+1. **FIRST:** Use compressed YAML (18mm margins, 10pt font)
+2. **SECOND:** Add line spacing compression (linestretch: 0.95)
+3. **THIRD:** Check word count - if >1600 words, content may need condensing
 4. **LAST RESORT:** Remove least relevant content
 
-#### Step 1: Adjust Margins (Try First)
+**YAML progression:**
+
+**Standard (default):**
 ```yaml
 ---
-geometry: margin=20mm  # Try this first
+geometry: margin=20mm
+fontsize: 10.5pt
 ---
 ```
-If still >2 pages, try `margin=18mm`
+Target: <1400 words
 
-#### Step 2: Adjust Font Size (Try Second)
-```yaml
----
-geometry: margin=18mm
-fontsize: 10pt  # Reduce from default 11pt
----
-```
-
-#### Step 3: Adjust Line Spacing (Try Third)
+**Compressed (if >2 pages):**
 ```yaml
 ---
 geometry: margin=18mm
 fontsize: 10pt
-linestretch: 0.95  # Slightly tighter line spacing
 ---
 ```
+Target: 1400-1600 words
 
-#### Step 4: Remove Content (Last Resort Only)
-**Only if steps 1-3 fail**
+**Maximum compression (if still >2 pages):**
+```yaml
+---
+geometry: margin=18mm
+fontsize: 10pt
+linestretch: 0.95
+---
+```
+Target: <1700 words
 
-Remove in this priority order:
+**If STILL >2 pages after maximum compression:**
+Content is too long. Remove in this priority order:
 1. Least relevant bullets for specific role
-2. Older experience (10+ years)
-3. Condense consultancy work
+2. Older experience (10+ years ago)
+3. Condense consultancy/previous experience section
 4. Tighten education section
 
 **NEVER remove:** Recent achievements, relevant experience, quantified metrics
 
-### Problem: File size is too small (<40KB) or too large (>100KB)
-**Cause:** Wrong template used (not Eisvogel)
+### Problem: File size wrong (<40KB or >100KB)
+**Cause:** Wrong template or YAML overrides breaking Eisvogel
 **Fix:**
-1. Check pandoc command includes `--template eisvogel`
-2. Regenerate with correct command
+1. Verify pandoc command includes `--template eisvogel`
+2. Check YAML doesn't have `documentclass:` or `header-includes:`
+3. Regenerate with standard YAML template
 
-### Problem: Margins are huge, fonts look wrong
-**Cause:** Custom YAML overriding Eisvogel template settings
+### Problem: Margins huge or fonts wrong
+**Cause:** `documentclass:` or `header-includes:` in YAML overriding Eisvogel
 **Fix:**
-1. Remove ALL custom YAML (documentclass, geometry, header-includes)
-2. Use minimal YAML or no YAML
-3. Regenerate
+1. Remove `documentclass: article` from YAML
+2. Remove `header-includes:` sections from YAML
+3. Use only geometry/fontsize/linestretch settings
+4. Regenerate
 
 ### Problem: Not A4 paper size
-**Cause:** Missing Eisvogel template or wrong YAML
+**Cause:** Missing Eisvogel template or no papersize setting
 **Fix:**
 1. Ensure `--template eisvogel` in pandoc command
-2. Verify with: `pdfinfo CV.pdf | grep "Page size"`
-3. Should show: 595 x 842 pts (A4)
+2. Add to YAML: `papersize: a4`
+3. Verify: `pdfinfo CV.pdf | grep "Page size"` → Should show 595 x 842 pts
 
 ## Output Files Created
 After completion, these files should exist:

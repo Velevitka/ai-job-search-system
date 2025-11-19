@@ -179,7 +179,7 @@ Under Vrbo role, add: "Drove user segmentation strategy via CDP implementation"
 
 1. **Search for existing applications:**
    ```bash
-   ls applications/ | grep -i "CompanyName"
+   find applications/active applications/archive -type d -name "*CompanyName*" 2>/dev/null
    ```
 
 2. **If matches found:**
@@ -224,7 +224,7 @@ Under Vrbo role, add: "Drove user segmentation strategy via CDP implementation"
 
 ### Step 2: Create Application Folder
 
-Create folder: `applications/YYYY-MM-CompanyName-RoleTitle/`
+Create folder: `applications/active/analyzing/YYYY-MM-CompanyName-RoleTitle/`
 
 Generate two files:
 
@@ -385,6 +385,42 @@ status: Analysis Phase
 **Estimated effort:** [LOW / MEDIUM / HIGH based on CV tailoring needed]
 ```
 
+### 3. `status.md`
+```markdown
+# Application Status - [Company Name] - [Role Title]
+
+**Current Status:** Analysis Phase
+**Last Updated:** YYYY-MM-DD HH:MM
+
+---
+
+## Application Details
+
+**Analyzed On:** YYYY-MM-DD
+**Fit Score:** X/10
+**Location:** [City, Country from JD]
+**Source File:** "[exact-filename.mhtml]"
+
+**CV Version:** Not generated
+**Cover Letter:** Not generated
+
+---
+
+## Career Preferences Alignment
+
+**Location Match:** [✅ Preferred / ⚠️ Open To / ❌ Avoid]
+**Seniority Match:** [✅ Target / ⚠️ Will Consider / ❌ Avoid]
+**Industry Match:** [✅ Preferred / ⚠️ Open To / ❌ Avoid]
+**Overall Alignment:** [✅ PROCEED / ⚠️ PROCEED WITH CAUTION / ❌ SKIP]
+
+---
+
+## Status Timeline
+
+### Analysis Phase - YYYY-MM-DD HH:MM
+**Notes:** Initial analysis completed. Fit score: X/10. [Include recommendation from analysis: YES/MAYBE/NO and 1-line summary]
+```
+
 ## Human Decision Point
 
 After creating these files, inform the user:
@@ -394,8 +430,9 @@ After creating these files, inform the user:
 Fit Score: X/10
 
 📁 Files created:
-- applications/YYYY-MM-CompanyName-Role/job-description.md
-- applications/YYYY-MM-CompanyName-Role/analysis.md
+- applications/active/analyzing/YYYY-MM-CompanyName-Role/job-description.md
+- applications/active/analyzing/YYYY-MM-CompanyName-Role/analysis.md
+- applications/active/analyzing/YYYY-MM-CompanyName-Role/status.md
 
 🤔 Review the fit score and analysis. Should we proceed with CV tailoring?
    - If YES: Run `/generate-cv CompanyName`

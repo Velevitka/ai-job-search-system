@@ -92,6 +92,58 @@ Update or create: `applications/.../status.md`
 [What worked - extract from notes]
 ```
 
+### Step 3.3: Move Application Folder (Based on Status)
+
+**IMPORTANT:** Application folders should be organized by their current status. Move the application folder when status changes:
+
+#### Folder Movement Rules:
+
+**1. Status = `applied`**
+```bash
+# Move from analyzing to applied
+mv applications/active/analyzing/[app-folder] applications/active/applied/
+```
+**Notify:** `📂 Moved application to applications/active/applied/`
+
+**2. Status = `interview-invited` or `interview-completed`**
+```bash
+# Move from analyzing or applied to interviewing
+# First check current location
+if [ -d "applications/active/analyzing/[app-folder]" ]; then
+  mv applications/active/analyzing/[app-folder] applications/active/interviewing/
+elif [ -d "applications/active/applied/[app-folder]" ]; then
+  mv applications/active/applied/[app-folder] applications/active/interviewing/
+fi
+```
+**Notify:** `📂 Moved application to applications/active/interviewing/`
+
+**3. Status = `rejected`, `withdrawn`, or `accepted`**
+```bash
+# Move to archive with quarterly and status-based subfolder
+YEAR_QUARTER=$(date +%Y-Q$(($(date +%-m)/3+1)))
+STATUS_FOLDER="rejected"  # or "withdrawn" or "accepted" based on status
+mkdir -p applications/archive/$YEAR_QUARTER/$STATUS_FOLDER
+
+# Check all active locations and move to archive
+if [ -d "applications/active/analyzing/[app-folder]" ]; then
+  mv applications/active/analyzing/[app-folder] applications/archive/$YEAR_QUARTER/$STATUS_FOLDER/
+elif [ -d "applications/active/applied/[app-folder]" ]; then
+  mv applications/active/applied/[app-folder] applications/archive/$YEAR_QUARTER/$STATUS_FOLDER/
+elif [ -d "applications/active/interviewing/[app-folder]" ]; then
+  mv applications/active/interviewing/[app-folder] applications/archive/$YEAR_QUARTER/$STATUS_FOLDER/
+fi
+```
+**Notify:** `📂 Archived application to applications/archive/$YEAR_QUARTER/$STATUS_FOLDER/`
+
+#### DO NOT Move When:
+- ❌ Folder not found (may have been moved manually - skip and continue)
+- ❌ Status unchanged (no folder movement needed)
+
+**Important Notes:**
+- Application folders track the lifecycle: analyzing → applied → interviewing → archive
+- Archive uses quarterly folders (e.g., 2025-Q4) for organization
+- Job files (in staging/) are handled separately in Step 3.5
+
 ### Step 3.5: Archive Job File (If Pipeline Complete)
 
 **IMPORTANT:** When application pipeline is complete, move job file from `staging/3-applying/` to archive:
